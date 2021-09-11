@@ -8,8 +8,8 @@ import notify from './plugins/notify';
 Vue.use(notify);
 Vue.config.productionTip = false;
 
-// mock when dev
-if (process.env.NODE_ENV === 'development') import('./api/mock');
+// mock 
+import('./api/mock');
 
 new Vue({
   router,
