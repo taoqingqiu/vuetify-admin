@@ -8,8 +8,8 @@ import notify from './plugins/notify';
 Vue.use(notify);
 Vue.config.productionTip = false;
 
-// mock 
-import('./api/mock');
+// mock when dev and gh-pages
+if (process.env.NODE_ENV === 'ghPages' || process.env.NODE_ENV === 'development') import('./api/mock');
 
 new Vue({
   router,
