@@ -50,19 +50,19 @@
       </v-card>
     </v-col>
     <v-col cols="12" md="9" class="d-flex align-self-stretch">
-      <v-card style="width: 100%" flat outlined class="py-2">
-        <v-toolbar flat dense>
+      <v-card style="width: 100%" flat outlined class="pb-10">
+        <v-card-title class="text-subtitle-1 mx-2">
           授权
           <v-spacer />
           类型
-        </v-toolbar>
+        </v-card-title>
         <v-divider class="mx-2" />
         <v-treeview
           hoverable
           :items="menus"
           color="primary"
           open-on-click
-          class="pa-2 mx-2"
+          class="py-2 px-2"
           selectable
           selected-color="primary"
           v-model="authorized"
@@ -71,7 +71,7 @@
             <v-chip small label>{{ type == 1 ? '一级菜单' : type == 2 ? '子菜单' : '操作' }}</v-chip>
           </template>
         </v-treeview>
-        <v-toolbar absolute bottom style="width: 100%" flat>
+        <v-toolbar style="width: 100%" flat bottom absolute>
           <v-btn small color="primary" @click="authorizeAll"> 全选 </v-btn>
           <v-btn small class="ml-2" :disabled="!modified" color="primary" @click="saveAuthority" :loading="savingAuthorities"> 保存 </v-btn>
           <v-btn small class="ml-2" :disabled="!modified" color="error" @click="resetAuthority"> 重置 </v-btn>

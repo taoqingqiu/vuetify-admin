@@ -12,7 +12,7 @@
     >
       <!-- top actions -->
       <template #top>
-        <v-toolbar flat dense class="mb-2 px-0">
+        <v-toolbar flat dense>
           <v-btn color="primary" @click="createDialog = true"> 新增 </v-btn>
           <v-btn color="error" class="ml-1 ml-md-2" @click="deleteManyDialog = true" :disabled="selected.length === 0">
             删除
