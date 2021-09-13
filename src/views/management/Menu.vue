@@ -16,12 +16,7 @@
       <template #top>
         <v-toolbar flat>
           <v-btn color="primary" @click="createRootDialog = true"> 新增 </v-btn>
-          <v-btn
-            color="error"
-            class="ml-2"
-            :disabled="selected.length === 0"
-            @click="deleteManyDialog = true"
-          >
+          <v-btn color="error" class="ml-1 ml-md-2" :disabled="selected.length === 0" @click="deleteManyDialog = true">
             删除
             <span v-if="selected.length > 0">({{ selected.length }}) </span>
           </v-btn>
@@ -34,16 +29,8 @@
         <div>
           <span v-for="i in level - 1" :key="i" class="ml-8"></span>
           {{ name }}
-          <v-btn
-            v-if="!isLeaf"
-            icon
-            @click="openMenu(index)"
-            small
-            class="px-0"
-          >
-            <v-icon>{{
-              openedMenus.includes(name) ? "mdi-menu-up" : "mdi-menu-down"
-            }}</v-icon>
+          <v-btn v-if="!isLeaf" icon @click="openMenu(index)" small class="px-0">
+            <v-icon>{{ openedMenus.includes(name) ? 'mdi-menu-up' : 'mdi-menu-down' }}</v-icon>
           </v-btn>
         </div>
       </template>
@@ -56,7 +43,7 @@
       <!-- type -->
       <template #[`item.type`]="{ item: { type } }">
         <v-chip small outlined color="primary" label>
-          {{ type === 1 ? "一级菜单" : type === 2 ? "子菜单" : "操作" }}
+          {{ type === 1 ? '一级菜单' : type === 2 ? '子菜单' : '操作' }}
         </v-chip>
       </template>
 
@@ -75,9 +62,7 @@
         </v-btn>
         <v-menu bottom offset-y>
           <template #activator="{ attrs, on }">
-            <v-btn text color="primary" small v-bind="attrs" v-on="on">
-              更多<v-icon small>mdi-chevron-down</v-icon>
-            </v-btn>
+            <v-btn text color="primary" small v-bind="attrs" v-on="on"> 更多<v-icon small>mdi-chevron-down</v-icon> </v-btn>
           </template>
           <v-list dense>
             <v-list-item
@@ -95,41 +80,27 @@
                 deleteSingleDialog = true;
               "
             >
-              <v-list-item-subtitle class="red--text"
-                >删除</v-list-item-subtitle
-              >
+              <v-list-item-subtitle class="red--text">删除</v-list-item-subtitle>
             </v-list-item>
           </v-list>
         </v-menu>
       </template>
     </v-data-table>
     <create-root-dialog v-model="createRootDialog" @after="updateMenus" />
-    <create-child-dialog
-      v-model="createChildDialog"
-      @after="afterAdd"
-      :parent="creatingChildMenu"
-    />
+    <create-child-dialog v-model="createChildDialog" @after="afterAdd" :parent="creatingChildMenu" />
     <edit-dialog v-model="editDialog" @after="afterEdit" :menu="editingMenu" />
-    <delete-single-dialog
-      v-model="deleteSingleDialog"
-      @after="afterDeleteSingle"
-      :menuId="deletingMenu"
-    />
-    <delete-many-dialog
-      v-model="deleteManyDialog"
-      @after="afterDeleteMany"
-      :menus="selected"
-    />
+    <delete-single-dialog v-model="deleteSingleDialog" @after="afterDeleteSingle" :menuId="deletingMenu" />
+    <delete-many-dialog v-model="deleteManyDialog" @after="afterDeleteMany" :menus="selected" />
   </v-container>
 </template>
 <script>
-import { getMenus, getMenuTree } from "../../api/menu";
-import CreateChildDialog from "../../components/management/menu/CreateChildDialog.vue";
-import CreateRootDialog from "../../components/management/menu/CreateRootDialog.vue";
-import DeleteManyDialog from "../../components/management/menu/DeleteManyDialog.vue";
-import DeleteSingleDialog from "../../components/management/menu/DeleteSingleDialog.vue";
-import EditDialog from "../../components/management/menu/EditDialog.vue";
-import { getChildren, getNodeByName } from "../../utils/tree-util";
+import { getMenus, getMenuTree } from '../../api/menu';
+import CreateChildDialog from '../../components/management/menu/CreateChildDialog.vue';
+import CreateRootDialog from '../../components/management/menu/CreateRootDialog.vue';
+import DeleteManyDialog from '../../components/management/menu/DeleteManyDialog.vue';
+import DeleteSingleDialog from '../../components/management/menu/DeleteSingleDialog.vue';
+import EditDialog from '../../components/management/menu/EditDialog.vue';
+import { getChildren, getNodeByName } from '../../utils/tree-util';
 
 export default {
   components: {
@@ -137,22 +108,22 @@ export default {
     CreateChildDialog,
     EditDialog,
     DeleteSingleDialog,
-    DeleteManyDialog
+    DeleteManyDialog,
   },
-  name: "management-menu",
+  name: 'management-menu',
   data() {
     return {
       headers: [
-        { text: "名称", value: "name" },
-        { text: "类型", value: "type", align: "center" },
-        { text: "图标", value: "icon" },
-        { text: "路由/标识", value: "path" },
-        { text: "顺序", value: "order" },
-        { text: "操作", value: "actions", align: "center", sortable: false }
+        { text: '名称', value: 'name' },
+        { text: '类型', value: 'type', align: 'center' },
+        { text: '图标', value: 'icon' },
+        { text: '路由/标识', value: 'path' },
+        { text: '顺序', value: 'order' },
+        { text: '操作', value: 'actions', align: 'center', sortable: false },
       ],
       menus: [],
       menuTree: null,
-      search: "",
+      search: '',
       selected: [],
       loading: false,
       openedMenus: [],
@@ -168,20 +139,16 @@ export default {
       createChildDialog: false,
       editDialog: false,
       deleteSingleDialog: false,
-      deleteManyDialog: false
+      deleteManyDialog: false,
     };
   },
   computed: {
     creatingChildMenu() {
-      return this.creatingChildMenuIndex > -1
-        ? this.menus[this.creatingChildMenuIndex]
-        : null;
+      return this.creatingChildMenuIndex > -1 ? this.menus[this.creatingChildMenuIndex] : null;
     },
     editingMenu() {
-      return this.editingMenuIndex > -1
-        ? this.menus[this.editingMenuIndex]
-        : null;
-    }
+      return this.editingMenuIndex > -1 ? this.menus[this.editingMenuIndex] : null;
+    },
   },
   created() {
     this.getMenus();
@@ -190,7 +157,7 @@ export default {
   methods: {
     async getMenus() {
       this.loading = true;
-      this.menus = (await getMenus()).data.map((t) => ({ ...t, level: 1 }));
+      this.menus = (await getMenus()).data.map(t => ({ ...t, level: 1 }));
       this.loading = false;
     },
     async getMenuTree() {
@@ -206,30 +173,20 @@ export default {
       const targetMenus = menus ? menus : this.menus;
       const targetMenu = targetMenus[index];
       if (this.openedMenus.includes(targetMenu.name)) {
-        this.openedMenus = this.openedMenus.filter(
-          (om) => om !== targetMenu.name
-        );
+        this.openedMenus = this.openedMenus.filter(om => om !== targetMenu.name);
         let lastChildren = index + 1;
         const childrenLevel = targetMenus[lastChildren].level;
         for (; lastChildren < targetMenus.length; lastChildren++) {
           if (targetMenus[lastChildren].level < childrenLevel) {
             break;
-          } else if (
-            this.openedMenus.includes(targetMenus[lastChildren].name)
-          ) {
-            this.openedMenus = this.openedMenus.filter(
-              (om) => om !== targetMenus[lastChildren].name
-            );
+          } else if (this.openedMenus.includes(targetMenus[lastChildren].name)) {
+            this.openedMenus = this.openedMenus.filter(om => om !== targetMenus[lastChildren].name);
           }
         }
         targetMenus.splice(index + 1, lastChildren - 1 - index);
       } else {
         const childrenMenus = getChildren(this.menuTree, targetMenu.id);
-        targetMenus.splice(
-          index + 1,
-          0,
-          ...childrenMenus.map((cm) => ({ ...cm, level: targetMenu.level + 1 }))
-        );
+        targetMenus.splice(index + 1, 0, ...childrenMenus.map(cm => ({ ...cm, level: targetMenu.level + 1 })));
         this.openedMenus.push(targetMenu.name);
       }
     },
@@ -257,7 +214,7 @@ export default {
      * 不同于 getMenus，此函数会考虑当前打开的菜单，并恢复打开状态。
      */
     async updateMenus() {
-      const menus = (await getMenus()).result.map((t) => ({ ...t, level: 1 }));
+      const menus = (await getMenus()).result.map(t => ({ ...t, level: 1 }));
       await this.getMenuTree();
 
       // 备份后重置已打开菜单
@@ -266,23 +223,20 @@ export default {
 
       // 重新打开
       openedMenus = openedMenus
-        .map((om) => getNodeByName(this.menuTree, om))
-        .filter((m) => m)
+        .map(om => getNodeByName(this.menuTree, om))
+        .filter(m => m)
         .sort((a, b) => a.menuType - b.menuType);
 
-      openedMenus.forEach((om) => {
+      openedMenus.forEach(om => {
         if (!om.isLeaf) {
-          const targetIndex = menus.reduce(
-            (pre, curr, idx) => (curr.key === om.key ? idx : pre),
-            0
-          );
+          const targetIndex = menus.reduce((pre, curr, idx) => (curr.key === om.key ? idx : pre), 0);
           this.openMenu(targetIndex, menus);
         }
       });
 
       // 完成打开后，一下子更新 this.menus
       this.menus = menus;
-    }
-  }
+    },
+  },
 };
 </script>

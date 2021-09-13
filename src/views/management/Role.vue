@@ -1,25 +1,13 @@
 <template>
   <v-container fluid fill-height class="d-flex white">
-    <v-col cols="3" class="d-flex align-self-stretch" ref="roles">
+    <v-col cols="12" md="3" class="d-flex align-self-stretch" ref="roles">
       <v-card style="width: 100%" flat outlined class="px-2">
         <v-card-title>
-          <v-btn color="primary" small @click="createDialog = true">
-            新增
-          </v-btn>
-          <v-btn color="primary" small @click="editDialog = true" class="ml-2">
-            编辑
-          </v-btn>
-          <v-btn
-            color="error"
-            class="ml-2"
-            small
-            :disabled="selectedRoles.length === 0"
-            @click="deleteDialog = true"
-          >
+          <v-btn color="primary" small @click="createDialog = true"> 新增 </v-btn>
+          <v-btn color="primary" small @click="editDialog = true" class="ml-1 ml-md-2"> 编辑 </v-btn>
+          <v-btn color="error" class="ml-1 ml-md-2" small :disabled="selectedRoles.length === 0" @click="deleteDialog = true">
             删除
-            <span v-if="selectedRoles.length > 0"
-              >({{ selectedRoles.length }})
-            </span>
+            <span v-if="selectedRoles.length > 0">({{ selectedRoles.length }}) </span>
           </v-btn>
         </v-card-title>
         <v-divider />
@@ -39,26 +27,16 @@
             ></v-text-field>
           </v-toolbar>
         </v-card-title>
-        <v-card-text
-          :style="{ height: maxHeight - 160 + 'px' }"
-          class="overflow-auto pa-0"
-        >
+        <v-card-text class="pa-0">
           <v-list dense nav>
             <v-list-item-group color="primary" mandatory v-model="activeRole">
               <v-list-item v-for="(role, index) in roles" :key="index">
                 <v-list-item-action>
-                  <v-checkbox
-                    @click.stop.prevent="selectRole(role.id)"
-                    :input-value="selectedRoles.includes(role.id)"
-                  />
+                  <v-checkbox @click.stop.prevent="selectRole(role.id)" :input-value="selectedRoles.includes(role.id)" />
                 </v-list-item-action>
                 <v-list-item-content>
-                  <v-list-item-title :title="`${role.name} (${role.symbol})`">
-                    {{ role.name }} ({{ role.symbol }})
-                  </v-list-item-title>
-                  <v-list-item-subtitle>{{
-                    role.description || "暂无描述~"
-                  }}</v-list-item-subtitle>
+                  <v-list-item-title :title="`${role.name} (${role.symbol})`"> {{ role.name }} ({{ role.symbol }}) </v-list-item-title>
+                  <v-list-item-subtitle>{{ role.description || '暂无描述~' }}</v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
             </v-list-item-group>
@@ -71,52 +49,32 @@
         </v-card-text>
       </v-card>
     </v-col>
-    <v-col cols="9" class="d-flex align-self-stretch">
-      <v-card style="width: 100%" flat outlined class="py-2 px-2">
+    <v-col cols="12" md="9" class="d-flex align-self-stretch">
+      <v-card style="width: 100%" flat outlined class="py-2">
         <v-toolbar flat dense>
           授权
           <v-spacer />
           类型
         </v-toolbar>
-        <v-divider />
+        <v-divider class="mx-2" />
         <v-treeview
           hoverable
           :items="menus"
           color="primary"
           open-on-click
-          class="overflow-auto pa-2"
-          :style="{ 'max-height': maxHeight - 164 + 'px' }"
+          class="pa-2 mx-2"
           selectable
           selected-color="primary"
           v-model="authorized"
         >
           <template #append="{ item: { type } }">
-            <v-chip small label>{{
-              type == 1 ? "一级菜单" : type == 2 ? "子菜单" : "操作"
-            }}</v-chip>
+            <v-chip small label>{{ type == 1 ? '一级菜单' : type == 2 ? '子菜单' : '操作' }}</v-chip>
           </template>
         </v-treeview>
         <v-toolbar absolute bottom style="width: 100%" flat>
           <v-btn small color="primary" @click="authorizeAll"> 全选 </v-btn>
-          <v-btn
-            small
-            class="ml-2"
-            :disabled="!modified"
-            color="primary"
-            @click="saveAuthority"
-            :loading="savingAuthorities"
-          >
-            保存
-          </v-btn>
-          <v-btn
-            small
-            class="ml-2"
-            :disabled="!modified"
-            color="error"
-            @click="resetAuthority"
-          >
-            重置
-          </v-btn>
+          <v-btn small class="ml-2" :disabled="!modified" color="primary" @click="saveAuthority" :loading="savingAuthorities"> 保存 </v-btn>
+          <v-btn small class="ml-2" :disabled="!modified" color="error" @click="resetAuthority"> 重置 </v-btn>
         </v-toolbar>
         <v-overlay absolute v-if="loadingMenus" opacity=".07">
           <v-alert color="primary" text>
@@ -126,40 +84,27 @@
       </v-card>
     </v-col>
     <create-dialog v-model="createDialog" :menus="menus" @reload="getRoles" />
-    <delete-dialog
-      v-model="deleteDialog"
-      :roles="selectedRoles"
-      @reload="getRoles"
-    />
-    <edit-dialog
-      v-model="editDialog"
-      :role="roles[activeRole]"
-      @reload="getRoles"
-    />
+    <delete-dialog v-model="deleteDialog" :roles="selectedRoles" @reload="getRoles" />
+    <edit-dialog v-model="editDialog" :role="roles[activeRole]" @reload="getRoles" />
   </v-container>
 </template>
 <script>
-import { getMenuTree } from "../../api/menu";
-import {
-  getAuthorizedMenus,
-  getRoles,
-  updateRoleAuthorities
-} from "../../api/role";
-import DeleteDialog from "../../components/management/role/DeleteDialog.vue";
-import CreateDialog from "../../components/management/role/CreateDialog.vue";
-import { getParentNode, flattenMenuTree } from "../../utils/tree-util";
-import EditDialog from "../../components/management/role/EditDialog.vue";
+import { getMenuTree } from '../../api/menu';
+import { getAuthorizedMenus, getRoles, updateRoleAuthorities } from '../../api/role';
+import DeleteDialog from '../../components/management/role/DeleteDialog.vue';
+import CreateDialog from '../../components/management/role/CreateDialog.vue';
+import { getParentNode, flattenMenuTree } from '../../utils/tree-util';
+import EditDialog from '../../components/management/role/EditDialog.vue';
 
 export default {
-  name: "management-role",
+  name: 'management-role',
   components: { CreateDialog, DeleteDialog, EditDialog },
   data() {
     return {
       // roles
-      activeRole: "",
+      activeRole: '',
       roles: [],
       selectedRoles: [],
-      maxHeight: 0,
       // tree related
       authorized: [],
       authorizedOrigin: [],
@@ -174,14 +119,13 @@ export default {
       editDialog: false,
       // search
       rolesQuantity: [],
-      keyword: ""
+      keyword: '',
     };
   },
   mounted() {
     // vuetify 会调整布局，所以延时 200ms 再获取 height
     // 而为了获取到 flex 布局自动撑满的 height，需要在获取 maxHeight 之后才获取所有角色、菜单树
     setTimeout(() => {
-      this.getMaxHeight();
       this.getRoles();
       this.getMenuTree();
     }, 200);
@@ -198,31 +142,26 @@ export default {
       }
     },
     roles(val) {
-      this.selectedRoles = this.selectedRoles.filter((sr) =>
-        val.some((r) => r.id === sr)
-      );
-    }
+      this.selectedRoles = this.selectedRoles.filter(sr => val.some(r => r.id === sr));
+    },
   },
   computed: {
     modified() {
       return JSON.stringify(this.authorized) !== this.authorizedOrigin;
-    }
+    },
   },
   methods: {
-    getMaxHeight() {
-      this.maxHeight = this.$refs.roles.offsetHeight;
-    },
     compressAuthorized(authorizedArr) {
       let resultArr = [...authorizedArr];
-      authorizedArr.forEach((ar) => {
+      authorizedArr.forEach(ar => {
         const parent = getParentNode(this.menus, ar);
-        parent && (resultArr = resultArr.filter((r) => r !== parent.id));
+        parent && (resultArr = resultArr.filter(r => r !== parent.id));
       });
       return resultArr;
     },
     expandAuthorized(authorizedArr) {
       let resultArr = [...authorizedArr];
-      authorizedArr.forEach((ar) => {
+      authorizedArr.forEach(ar => {
         const parent = getParentNode(this.menus, ar);
         if (parent) {
           resultArr.push(...this.expandAuthorized([parent.id]));
@@ -234,9 +173,7 @@ export default {
       return resultArr;
     },
     authorizeAll() {
-      this.authorized = this.compressAuthorized(
-        flattenMenuTree(this.menus, "id")
-      );
+      this.authorized = this.compressAuthorized(flattenMenuTree(this.menus, 'id'));
     },
     async saveAuthority() {
       this.savingAuthorities = true;
@@ -246,14 +183,14 @@ export default {
       this.savingAuthorities = false;
 
       // notify
-      this.$notify.success("权限已保存！");
+      this.$notify.success('权限已保存！');
     },
     resetAuthority() {
       this.authorized = JSON.parse(this.authorizedOrigin);
     },
     selectRole(roleId) {
       if (this.selectedRoles.includes(roleId)) {
-        this.selectedRoles = this.selectedRoles.filter((sr) => sr !== roleId);
+        this.selectedRoles = this.selectedRoles.filter(sr => sr !== roleId);
       } else {
         this.selectedRoles.push(roleId);
       }
@@ -264,10 +201,8 @@ export default {
       this.rolesQuantity = JSON.parse(JSON.stringify(this.roles));
 
       // selected 中，已然不再的角色要滤掉
-      const allRoles = this.roles.map((r) => r.id);
-      this.selectedRoles = this.selectedRoles.filter((sr) =>
-        allRoles.includes(sr)
-      );
+      const allRoles = this.roles.map(r => r.id);
+      this.selectedRoles = this.selectedRoles.filter(sr => allRoles.includes(sr));
       this.loadingRoles = false;
     },
     async getMenuTree() {
@@ -277,9 +212,7 @@ export default {
     },
     async getAuthorizedMenus(roleId) {
       this.loadingMenus = true;
-      this.authorized = this.compressAuthorized(
-        (await getAuthorizedMenus(roleId)).data
-      );
+      this.authorized = this.compressAuthorized((await getAuthorizedMenus(roleId)).data);
 
       // 实践表明，初始时，直接连续赋值这二位
       // 会影响 computed - modified 的计算结果，故 nextTick
@@ -293,10 +226,8 @@ export default {
      * 筛选角色
      */
     filterRole(keyword) {
-      this.roles = this.rolesQuantity.filter((r) =>
-        (r.roleName + r.description + r.roleCode).includes(keyword)
-      );
-    }
-  }
+      this.roles = this.rolesQuantity.filter(r => (r.roleName + r.description + r.roleCode).includes(keyword));
+    },
+  },
 };
 </script>

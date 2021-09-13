@@ -12,19 +12,14 @@
     >
       <!-- top actions -->
       <template #top>
-        <v-toolbar flat dense class="mb-2">
+        <v-toolbar flat dense class="mb-2 px-0">
           <v-btn color="primary" @click="createDialog = true"> 新增 </v-btn>
-          <v-btn
-            color="error"
-            class="ml-2"
-            @click="deleteManyDialog = true"
-            :disabled="selected.length === 0"
-          >
+          <v-btn color="error" class="ml-1 ml-md-2" @click="deleteManyDialog = true" :disabled="selected.length === 0">
             删除
             <span v-if="selected.length > 0">({{ selected.length }}) </span>
           </v-btn>
           <v-spacer />
-          <div style="width: 240px">
+          <div style="width: 240px" class="ml-4 mmd-0">
             <v-text-field
               hide-details
               outlined
@@ -49,7 +44,7 @@
       <!-- gender -->
       <template #[`item.gender`]="{ item: { gender } }">
         <span>
-          {{ gender === 1 ? "男" : "女" }}
+          {{ gender === 1 ? '男' : '女' }}
         </span>
       </template>
 
@@ -66,24 +61,15 @@
         >
           <span>{{ i }}</span>
         </v-chip>
-        <span
-          class="grey--text text-caption"
-          v-if="roleNames && roleNames.split(',').length > 2"
-        >
-          (等{{ roleNames.split(",").length }}项)
+        <span class="grey--text text-caption" v-if="roleNames && roleNames.split(',').length > 2">
+          (等{{ roleNames.split(',').length }}项)
         </span>
       </template>
 
       <!-- 状态 -->
       <template #[`item.status`]="{ item: { status } }">
-        <v-badge
-          inline
-          :color="status == 1 ? 'success' : 'warning'"
-          left
-          dot
-          style="font-size: 12px"
-        >
-          {{ status == 1 ? "正常" : "冻结" }}
+        <v-badge inline :color="status == 1 ? 'success' : 'warning'" left dot style="font-size: 12px">
+          {{ status == 1 ? '正常' : '冻结' }}
         </v-badge>
       </template>
 
@@ -94,9 +80,7 @@
           color="primary"
           @click="
             editingUser = JSON.parse(JSON.stringify(item));
-            editingUser['roleIds'] = item['roleIds']
-              ? item['roleIds'].split(',')
-              : [];
+            editingUser['roleIds'] = item['roleIds'] ? item['roleIds'].split(',') : [];
             editDialog = true;
           "
           small
@@ -105,9 +89,7 @@
         </v-btn>
         <v-menu bottom offset-y>
           <template #activator="{ attrs, on }">
-            <v-btn text color="primary" small v-bind="attrs" v-on="on">
-              更多<v-icon small>mdi-chevron-down</v-icon>
-            </v-btn>
+            <v-btn text color="primary" small v-bind="attrs" v-on="on"> 更多<v-icon small>mdi-chevron-down</v-icon> </v-btn>
           </template>
           <v-list dense>
             <v-list-item @click="resetDialog = true">
@@ -137,9 +119,7 @@
                 deleteDialog = true;
               "
             >
-              <v-list-item-subtitle class="red--text"
-                >删除</v-list-item-subtitle
-              >
+              <v-list-item-subtitle class="red--text">删除</v-list-item-subtitle>
             </v-list-item>
           </v-list>
         </v-menu>
@@ -147,38 +127,22 @@
     </v-data-table>
     <create-dialog v-model="createDialog" @reload="getUsers" />
     <edit-dialog v-model="editDialog" @reload="getUsers" :user="editingUser" />
-    <freeze-dialog
-      v-model="freezeDialog"
-      :user="freezingUser"
-      @reload="getUsers"
-    />
-    <activate-dialog
-      v-model="activateDialog"
-      :user="activatingUser"
-      @reload="getUsers"
-    />
+    <freeze-dialog v-model="freezeDialog" :user="freezingUser" @reload="getUsers" />
+    <activate-dialog v-model="activateDialog" :user="activatingUser" @reload="getUsers" />
     <reset-dialog v-model="resetDialog" :user="resetingUser" />
-    <delete-dialog
-      v-model="deleteDialog"
-      :userId="deletingUser"
-      @reload="getUsers"
-    />
-    <delete-many-dialog
-      v-model="deleteManyDialog"
-      :users="selected"
-      @reload="getUsers"
-    />
+    <delete-dialog v-model="deleteDialog" :userId="deletingUser" @reload="getUsers" />
+    <delete-many-dialog v-model="deleteManyDialog" :users="selected" @reload="getUsers" />
   </v-container>
 </template>
 <script>
-import { getUsers } from "@/api/user";
-import ActivateDialog from "@/components/management/user/ActivateDialog.vue";
-import CreateDialog from "@/components/management/user/CreateDialog.vue";
-import DeleteDialog from "@/components/management/user/DeleteDialog.vue";
-import DeleteManyDialog from "@/components/management/user/DeleteManyDialog.vue";
-import EditDialog from "@/components/management/user/EditDialog.vue";
-import FreezeDialog from "@/components/management/user/FreezeDialog.vue";
-import ResetDialog from "@/components/management/user/ResetDialog.vue";
+import { getUsers } from '@/api/user';
+import ActivateDialog from '@/components/management/user/ActivateDialog.vue';
+import CreateDialog from '@/components/management/user/CreateDialog.vue';
+import DeleteDialog from '@/components/management/user/DeleteDialog.vue';
+import DeleteManyDialog from '@/components/management/user/DeleteManyDialog.vue';
+import EditDialog from '@/components/management/user/EditDialog.vue';
+import FreezeDialog from '@/components/management/user/FreezeDialog.vue';
+import ResetDialog from '@/components/management/user/ResetDialog.vue';
 
 export default {
   components: {
@@ -188,23 +152,23 @@ export default {
     ResetDialog,
     DeleteDialog,
     ActivateDialog,
-    DeleteManyDialog
+    DeleteManyDialog,
   },
-  name: "management-user",
+  name: 'management-user',
   data() {
     return {
       headers: [
-        { text: "用户名", value: "username" },
-        { text: "邮箱", value: "email" },
-        { text: "头像", value: "avatar", sortable: false },
-        { text: "性别", value: "gender" },
-        { text: "角色", value: "roleNames", sortable: false },
-        { text: "状态", value: "status" },
-        { text: "创建时间", value: "createTime" },
-        { text: "操作", value: "actions", align: "center", sortable: false }
+        { text: '用户名', value: 'username' },
+        { text: '邮箱', value: 'email' },
+        { text: '头像', value: 'avatar', sortable: false },
+        { text: '性别', value: 'gender' },
+        { text: '角色', value: 'roleNames', sortable: false },
+        { text: '状态', value: 'status' },
+        { text: '创建时间', value: 'createTime' },
+        { text: '操作', value: 'actions', align: 'center', sortable: false },
       ],
       users: [],
-      search: "",
+      search: '',
       selected: [],
       loading: false,
       // pagination at server
@@ -226,7 +190,7 @@ export default {
       deleteManyDialog: false,
       activateDialog: false,
       // search
-      searchData: {}
+      searchData: {},
     };
   },
   created() {
@@ -243,7 +207,7 @@ export default {
       this.loading = true;
       this.users = (await getUsers()).data;
       this.loading = false;
-    }
-  }
+    },
+  },
 };
 </script>

@@ -58,18 +58,22 @@
                 </v-list-item-icon>
               </v-list-item>
             </template>
-            <v-list :key="idx" v-for="(i, idx) in item.children.concat().sort((a, b) => a.order - b.order)">
+            <v-list :key="idx" v-for="(i, idx) in item.children.concat().sort((a, b) => a.order - b.order)" dense>
               <v-list-item :to="i.path" v-if="!i.children">
                 <v-list-item-title>{{ i.name }}</v-list-item-title>
               </v-list-item>
               <v-menu :key="idx" v-else offset-x close-delay="500" open-delay="500" @input="val => !val && (secondMenu[index] = false)">
                 <template #activator="{ attrs, on }">
                   <v-list-item v-bind="attrs" v-on="on">
-                    {{ i.name }}
-                    <v-icon small>mdi-chevron-right</v-icon>
+                    <v-list-item-title>
+                      {{ i.name }}
+                    </v-list-item-title>
+                    <v-list-item-icon>
+                      <v-icon small>mdi-chevron-right</v-icon>
+                    </v-list-item-icon>
                   </v-list-item>
                 </template>
-                <v-list :key="_idx" v-for="(_i, _idx) in i.children.concat().sort((a, b) => a.order - b.order)">
+                <v-list dense :key="_idx" v-for="(_i, _idx) in i.children.concat().sort((a, b) => a.order - b.order)">
                   <v-list-item :to="_i.path">
                     <v-list-item-title>{{ _i.name }}</v-list-item-title>
                   </v-list-item>
