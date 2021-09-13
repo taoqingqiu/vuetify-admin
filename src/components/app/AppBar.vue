@@ -57,12 +57,12 @@
       <v-list dense max-width="150px">
         <v-list-item>
           <v-list-item-content>
-            <v-list-item-title>个人中心</v-list-item-title>
+            <v-list-item-subtitle>个人中心</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
         <v-list-item @click="signOut">
           <v-list-item-content>
-            <v-list-item-title class="red--text">退出登录</v-list-item-title>
+            <v-list-item-subtitle class="red--text">退出登录</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
       </v-list>
