@@ -24,7 +24,9 @@
                 <v-card flat class="pa-2" @click.stop.native style="width: 400px">
                   <avatar-uploader @confirm="confirmAvatar" hideShapeGroup>
                     <template #[`action.innerSelectButton`]="{ on }">
-                      <v-icon v-on="on">mdi-upload</v-icon>
+                      <v-btn icon>
+                        <v-icon v-on="on">mdi-upload</v-icon>
+                      </v-btn>
                     </template>
                     <template #[`action.slider`]="{ on, attrs }">
                       <v-slider v-on="on" v-bind="attrs" step="0.01" hide-details />

@@ -2,11 +2,12 @@
   <v-card>
     <v-row class="px-5">
       <v-col cols="8">
-        <div style="color: rgba(0, 0, 0, 0.37)">{{ title }}</div>
+        <div class="subtitle grey--text">{{ title }}</div>
         <div>
           <span class="text-h5 mr-1">{{ count }}</span>
-          <span style="color: rgba(0, 0, 0, 0.618)">/ {{ total }}</span>
-          <small class="ml-1" v-show="unit">({{ unit }})</small>
+          <span class="grey--text"
+            >/ {{ total }}<small class="ml-1" v-show="unit">({{ unit }})</small>
+          </span>
         </div>
         <router-link :to="path"><a class="info--text" style="font-size: 14px; text-decoration: none">DETAILS</a></router-link>
       </v-col>

@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid fill-height class="d-flex white">
+  <v-container fluid fill-height :class="['d-flex', { white: !$vuetify.theme.dark }]">
     <v-col cols="12" md="3" class="d-flex align-self-stretch" ref="roles">
       <v-card style="width: 100%" flat outlined class="px-2">
         <v-card-title>
@@ -32,7 +32,7 @@
             <v-list-item-group color="primary" mandatory v-model="activeRole">
               <v-list-item v-for="(role, index) in roles" :key="index">
                 <v-list-item-action>
-                  <v-checkbox @click.stop.prevent="selectRole(role.id)" :input-value="selectedRoles.includes(role.id)" />
+                  <v-checkbox color="primary" @click.stop.prevent="selectRole(role.id)" :input-value="selectedRoles.includes(role.id)" />
                 </v-list-item-action>
                 <v-list-item-content>
                   <v-list-item-title :title="`${role.name} (${role.symbol})`"> {{ role.name }} ({{ role.symbol }}) </v-list-item-title>

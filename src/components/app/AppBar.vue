@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar color="#17263d" app flat dense clipped-left dark>
+  <v-app-bar :color="$vuetify.theme.dark ? '#1e1e1e' : '#17263d'" app flat dense clipped-left dark>
     <v-app-bar-nav-icon class="d-lg-none" @click.stop="showNavDrawer"> </v-app-bar-nav-icon>
     <v-img max-width="24" src="https://cdn.vuetifyjs.com/docs/images/logos/vuetify-logo-light.svg" class="mr-3"></v-img>
     <div class="title white--text d-none d-md-block">Vuetify Admin</div>
@@ -12,7 +12,8 @@
       class="rounded-lg"
       prepend-inner-icon="mdi-magnify"
       hide-details
-      background-color="#233a5f"
+      clearable
+      :background-color="$vuetify.theme.dark ? 'grey' : '#233a5f'"
       style="max-width: 240px"
     />
     <v-btn icon @click="$store.commit('app/SET_SETTINGS_DRAWER', true)">

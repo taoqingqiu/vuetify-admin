@@ -13,7 +13,7 @@
     <!-- settings drawer -->
     <settings-drawer v-model="$store.state.app.settingsDrawer" />
 
-    <v-main style="background-color: #f2f3f8">
+    <v-main :style="{ 'background-color': $vuetify.theme.dark ? '#363636' : '#f2f3f8' }">
       <router-view />
     </v-main>
   </v-app>

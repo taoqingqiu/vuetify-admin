@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid fill-height class="d-flex white">
+  <v-container fluid fill-height :class="['d-flex', { white: !$vuetify.theme.dark }]">
     <v-data-table
       style="width: 100%"
       :headers="headers"
@@ -7,6 +7,7 @@
       class="align-self-stretch"
       v-model="selected"
       show-select
+      checkbox-color="primary"
       :loading="loading"
       :items-per-page="-1"
       hide-default-footer
