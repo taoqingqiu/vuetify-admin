@@ -49,7 +49,7 @@
       class="ma-0"
     >
       <v-spacer />
-      <div class="text-right">By <a href="https://github.com/taoqingqiu" style="color: #fff">Qingqiu</a><br />version 0.0.1</div>
+      <div class="text-right">By <a href="https://github.com/taoqingqiu" style="color: #fff">Qingqiu</a><br />version 0.0.2</div>
     </v-toolbar>
   </v-container>
 </template>
