@@ -8,3 +8,4 @@ This is a simple template of admin-app based on vue2.x and vuetify2.x.
 
 - [ ] color choosing in settings
 - [ ] example usage of  buttons authorities
+- [ ] english supporting
