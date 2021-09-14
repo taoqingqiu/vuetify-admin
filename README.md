@@ -7,3 +7,4 @@ This is a simple template of admin-app based on vue2.x and vuetify2.x.
 # TODO
 
 - [ ] color choosing in settings
+- [ ] example usage of  buttons authorities
