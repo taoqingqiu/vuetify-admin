@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="value" width="400px" persistent>
+  <v-dialog :value="value" width="400px" persistent>
     <v-card>
       <v-card-title class="text-h5"> 删除确认 </v-card-title>
       <v-card-text class="my-4">

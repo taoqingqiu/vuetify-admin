@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="value" width="600px" persistent>
+  <v-dialog :value="value" width="600px" persistent>
     <v-card>
       <v-card-title class="text-h5"> 编辑角色 </v-card-title>
       <v-card-text>
