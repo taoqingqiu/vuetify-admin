@@ -29,7 +29,7 @@
               <v-list-item :key="idx" :to="i.path" v-if="!i.children">
                 <v-list-item-title>{{ i.name }}</v-list-item-title>
               </v-list-item>
-              <v-list-group v-else :key="idx" no-action sub-group>
+              <v-list-group v-else :key="idx" no-action sub-group :value="true">
                 <template #activator>
                   <v-list-item-title>{{ i.name }}</v-list-item-title>
                 </template>
