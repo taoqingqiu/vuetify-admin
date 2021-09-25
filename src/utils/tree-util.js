@@ -4,9 +4,9 @@
  * @param {*} menuTree
  * @returns
  */
-export const flattenMenuTree = (menuTree, returnKey = "path") => {
+export const flattenMenuTree = (menuTree, returnKey = 'path') => {
   const resultArr = [];
-  menuTree.forEach((menu) => {
+  menuTree.forEach(menu => {
     if (!menu.children) {
       resultArr.push(menu[returnKey]);
     } else {
@@ -28,7 +28,7 @@ export const flattenMenuTree = (menuTree, returnKey = "path") => {
  */
 export const getChildren = (treeArr, id) => {
   let result = null;
-  treeArr.forEach((t) => {
+  treeArr.forEach(t => {
     if (t.id === id) {
       result = JSON.parse(JSON.stringify(t.children));
     } else if (t.children && !result) {
@@ -51,7 +51,7 @@ export const getChildren = (treeArr, id) => {
  */
 export const getNodeByName = (treeArr, name) => {
   let result = null;
-  treeArr.forEach((t) => {
+  treeArr.forEach(t => {
     if (t.name === name) {
       result = JSON.parse(JSON.stringify(t));
     } else if (t.children && !result) {
@@ -73,13 +73,15 @@ export const getNodeByName = (treeArr, name) => {
  * @returns
  */
 export const getParentNode = (treeArr, id, parent = null) => {
-  let parentNode = parent;
-  if (!treeArr.some((t) => t.id === id)) {
-    treeArr.forEach((t) => {
-      if (t.children) {
+  let parentNode = null;
+  if (!treeArr.some(t => t.id === id)) {
+    treeArr.forEach(t => {
+      if (t.children && !parentNode) {
         parentNode = getParentNode(t.children, id, t);
       }
     });
+  } else {
+    parentNode = parent;
   }
   return parentNode;
 };

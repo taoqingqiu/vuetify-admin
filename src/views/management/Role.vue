@@ -151,6 +151,10 @@ export default {
     },
   },
   methods: {
+    /**
+     * 由于 treeview 的选择模式为 ‘leaf’
+     * 故需要从已授权菜单中，去掉所有“父”节点（不然由于选种模式，其下所有节点都处于 checked 状态）
+     */
     compressAuthorized(authorizedArr) {
       let resultArr = [...authorizedArr];
       authorizedArr.forEach(ar => {
