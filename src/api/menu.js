@@ -13,6 +13,12 @@ export const getMenus = () => axios.get('/menu-management/menus');
 export const getMenuTree = () => axios.get('/menu-management/menu-tree');
 
 /**
+ * 获取菜单列表
+ * @returns
+ */
+export const getMenuList = () => axios.get('/menu-management/menu-list');
+
+/**
  * 新建根菜单
  * @param {*} createData
  * @returns

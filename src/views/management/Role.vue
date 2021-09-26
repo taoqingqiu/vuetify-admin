@@ -50,28 +50,9 @@
       </v-card>
     </v-col>
     <v-col cols="12" md="9" class="d-flex align-self-stretch">
-      <v-card style="width: 100%" flat outlined class="pb-10">
-        <v-card-title class="text-subtitle-1 mx-2">
-          授权
-          <v-spacer />
-          类型
-        </v-card-title>
-        <v-divider class="mx-2" />
-        <v-treeview
-          hoverable
-          :items="menus"
-          color="primary"
-          open-on-click
-          class="py-2 px-2"
-          selectable
-          selected-color="primary"
-          v-model="authorized"
-        >
-          <template #append="{ item: { type } }">
-            <v-chip small label>{{ type == 1 ? '一级菜单' : type == 2 ? '子菜单' : '操作' }}</v-chip>
-          </template>
-        </v-treeview>
-        <v-toolbar style="width: 100%" flat bottom absolute>
+      <v-card style="width: 100%" flat outlined class="pb-16">
+        <v-data-table></v-data-table>
+        <v-toolbar flat bottom absolute>
           <v-btn small color="primary" @click="authorizeAll"> 全选 </v-btn>
           <v-btn small class="ml-2" :disabled="!modified" color="primary" @click="saveAuthority" :loading="savingAuthorities"> 保存 </v-btn>
           <v-btn small class="ml-2" :disabled="!modified" color="error" @click="resetAuthority"> 重置 </v-btn>
@@ -89,7 +70,7 @@
   </v-container>
 </template>
 <script>
-import { getMenuTree } from '../../api/menu';
+import { getMenuList } from '../../api/menu';
 import { getAuthorizedMenus, getRoles, updateRoleAuthorities } from '../../api/role';
 import DeleteDialog from '../../components/management/role/DeleteDialog.vue';
 import CreateDialog from '../../components/management/role/CreateDialog.vue';
@@ -127,7 +108,7 @@ export default {
     // 而为了获取到 flex 布局自动撑满的 height，需要在获取 maxHeight 之后才获取所有角色、菜单树
     setTimeout(() => {
       this.getRoles();
-      this.getMenuTree();
+      this.getMenuList();
     }, 200);
   },
   watch: {
@@ -209,9 +190,9 @@ export default {
       this.selectedRoles = this.selectedRoles.filter(sr => allRoles.includes(sr));
       this.loadingRoles = false;
     },
-    async getMenuTree() {
+    async getMenuList() {
       this.loadingMenus = true;
-      this.menus = (await getMenuTree()).data;
+      this.menus = (await getMenuList()).data;
       this.loadingMenus = false;
     },
     async getAuthorizedMenus(roleId) {

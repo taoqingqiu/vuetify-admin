@@ -104,6 +104,81 @@ export default {
       ],
     },
   ]),
+  'get|/api/menu-management/menu-list': createResponse([
+    {
+      module: '综合看板',
+      menus: [
+        {
+          id: 1,
+          name: '综合看板',
+        },
+      ],
+    },
+    {
+      module: '系统管理',
+      menus: [
+        {
+          id: 2,
+          name: '用户管理',
+        },
+        {
+          id: 3,
+          name: '菜单管理',
+        },
+        {
+          id: 4,
+          name: '角色管理',
+        },
+      ],
+      actions: [
+        {
+          id: 5,
+          name: '新建用户',
+        },
+        {
+          id: 6,
+          name: '编辑用户',
+        },
+        {
+          id: 7,
+          name: '删除用户',
+        },
+        {
+          id: 8,
+          name: '新建菜单',
+        },
+        {
+          id: 9,
+          name: '编辑菜单',
+        },
+        {
+          id: 10,
+          name: '删除菜单',
+        },
+        {
+          id: 11,
+          name: '新建角色',
+        },
+        {
+          id: 12,
+          name: '编辑角色',
+        },
+        {
+          id: 13,
+          name: '删除角色',
+        },
+      ],
+    },
+    {
+      module: '三级菜单',
+      menus: [
+        {
+          id: 14,
+          name: '示例',
+        },
+      ],
+    },
+  ]),
   'post|/api/menu-management/menu': createResponse(),
   'put|/api/menu-management/menu/\\d+': createResponse(),
   'delete|/api/menu-management/menus': createResponse(),
