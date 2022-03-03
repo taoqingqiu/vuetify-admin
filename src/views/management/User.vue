@@ -1,23 +1,34 @@
 <template>
-  <v-container fluid fill-height :class="['d-flex', { white: !$vuetify.theme.dark }]">
+  <v-container
+    fluid
+    fill-height
+    :class="['d-flex', { white: !$vuetify.theme.dark }]"
+  >
     <v-data-table
-      style="width: 100%"
       :headers="headers"
-      :items="users"
-      class="align-self-stretch"
+      :items="items"
       :search="search"
-      v-model="selected"
-      show-select
-      checkbox-color="primary"
       :loading="loading"
+      :height="tableHeight"
+      class="align-self-stretch flex-grow-1"
+      checkbox-color="primary"
+      v-model="selectedItems"
+      show-select
     >
-      <!-- top actions -->
+      <!-- top toolbar -->
       <template #top>
         <v-toolbar flat dense>
           <v-btn color="primary" @click="createDialog = true"> 新增 </v-btn>
-          <v-btn color="error" class="ml-1 ml-md-2" @click="deleteManyDialog = true" :disabled="selected.length === 0">
+          <v-btn
+            color="error"
+            class="ml-1 ml-md-2"
+            @click="deleteManyDialog = true"
+            :disabled="selectedItems.length === 0"
+          >
             删除
-            <span v-if="selected.length > 0">({{ selected.length }}) </span>
+            <span v-if="selectedItems.length > 0"
+              >({{ selectedItems.length }})
+            </span>
           </v-btn>
           <v-spacer />
           <div style="width: 240px" class="ml-4 mmd-0">
@@ -35,42 +46,48 @@
         </v-toolbar>
       </template>
 
-      <!-- avatar -->
-      <template #[`item.avatar`]="{ item }">
-        <v-avatar size="32px">
-          <v-img :src="item.avatar"></v-img>
-        </v-avatar>
-      </template>
-
-      <!-- gender -->
-      <template #[`item.gender`]="{ item: { gender } }">
-        <span>
-          {{ gender === 1 ? '男' : '女' }}
-        </span>
-      </template>
-
       <!-- roles -->
-      <template #[`item.roleNames`]="{ item: { roleNames } }">
+      <template #[`item.roles`]="{ item: { roles } }">
         <v-chip
-          v-for="(i, idx) in roleNames ? roleNames.split(',').slice(0, 2) : []"
-          :key="idx"
+          v-for="(role, index) in roles.slice(0, 4)"
+          :key="index"
           small
           outlined
           color="primary"
           label
           class="mr-1"
         >
-          <span>{{ i }}</span>
+          <span>{{ role.name }}</span>
         </v-chip>
-        <span class="grey--text text-caption" v-if="roleNames && roleNames.split(',').length > 2">
-          (等{{ roleNames.split(',').length }}项)
-        </span>
+        <tailed-tooltip top>
+          <template #activator="{ on }">
+            <span
+              class="grey--text text-caption"
+              v-if="roles.length > 4"
+              v-on="on"
+            >
+              ({{ roles.length - 4 }}+)
+            </span>
+          </template>
+          {{
+            roles
+              .slice(4)
+              .map((r) => r.name)
+              .join(",")
+          }}
+        </tailed-tooltip>
       </template>
 
-      <!-- 状态 -->
+      <!-- status -->
       <template #[`item.status`]="{ item: { status } }">
-        <v-badge inline :color="status == 1 ? 'success' : 'warning'" left dot style="font-size: 12px">
-          {{ status == 1 ? '正常' : '冻结' }}
+        <v-badge
+          inline
+          :color="status === 1 ? 'success' : 'warning'"
+          left
+          dot
+          class="text-caption pr-4"
+        >
+          {{ status === 1 ? "正常" : "冻结" }}
         </v-badge>
       </template>
 
@@ -80,97 +97,70 @@
           text
           color="primary"
           @click="
-            editingUser = JSON.parse(JSON.stringify(item));
-            editingUser['roleIds'] = item['roleIds'] ? item['roleIds'].split(',') : [];
+            theItem = JSON.parse(JSON.stringify(item));
+            theItem['roles'] = item['roles'].map((r) => r.id);
             editDialog = true;
           "
           small
         >
           编辑
         </v-btn>
-        <v-menu bottom offset-y>
-          <template #activator="{ attrs, on }">
-            <v-btn text color="primary" small v-bind="attrs" v-on="on"> 更多<v-icon small>mdi-chevron-down</v-icon> </v-btn>
-          </template>
-          <v-list dense>
-            <v-list-item @click="resetDialog = true">
-              <v-list-item-subtitle>重置密码</v-list-item-subtitle>
-            </v-list-item>
-            <v-list-item
-              v-if="item.status == 1"
-              @click="
-                freezingUser = item;
-                freezeDialog = true;
-              "
-            >
-              <v-list-item-subtitle>冻结</v-list-item-subtitle>
-            </v-list-item>
-            <v-list-item
-              v-else
-              @click="
-                activatingUser = item;
-                activateDialog = true;
-              "
-            >
-              <v-list-item-subtitle>激活</v-list-item-subtitle>
-            </v-list-item>
-            <v-list-item
-              @click="
-                deletingUser = item.id;
-                deleteDialog = true;
-              "
-            >
-              <v-list-item-subtitle class="red--text">删除</v-list-item-subtitle>
-            </v-list-item>
-          </v-list>
-        </v-menu>
+        <v-btn
+          text
+          color="error"
+          @click="
+            {
+            }
+          "
+          small
+        >
+          删除
+        </v-btn>
       </template>
     </v-data-table>
     <create-dialog v-model="createDialog" @reload="getUsers" />
-    <edit-dialog v-model="editDialog" @reload="getUsers" :user="editingUser" />
-    <freeze-dialog v-model="freezeDialog" :user="freezingUser" @reload="getUsers" />
-    <activate-dialog v-model="activateDialog" :user="activatingUser" @reload="getUsers" />
-    <reset-dialog v-model="resetDialog" :user="resetingUser" />
-    <delete-dialog v-model="deleteDialog" :userId="deletingUser" @reload="getUsers" />
-    <delete-many-dialog v-model="deleteManyDialog" :users="selected" @reload="getUsers" />
+    <edit-dialog v-model="editDialog" @reload="getUsers" :item="theItem" />
+    <delete-dialog
+      v-model="deleteDialog"
+      :userId="deletingUser"
+      @reload="getUsers"
+    />
+    <delete-many-dialog
+      v-model="deleteManyDialog"
+      :users="selectedItems"
+      @reload="getUsers"
+    />
   </v-container>
 </template>
 <script>
-import { getUsers } from '@/api/user';
-import ActivateDialog from '@/components/management/user/ActivateDialog.vue';
-import CreateDialog from '@/components/management/user/CreateDialog.vue';
-import DeleteDialog from '@/components/management/user/DeleteDialog.vue';
-import DeleteManyDialog from '@/components/management/user/DeleteManyDialog.vue';
-import EditDialog from '@/components/management/user/EditDialog.vue';
-import FreezeDialog from '@/components/management/user/FreezeDialog.vue';
-import ResetDialog from '@/components/management/user/ResetDialog.vue';
+import { getUsers } from "@/api/user";
+import CreateDialog from "@/components/management/user/CreateDialog.vue";
+import DeleteDialog from "@/components/management/user/DeleteDialog.vue";
+import DeleteManyDialog from "@/components/management/user/DeleteManyDialog.vue";
+import EditDialog from "@/components/management/user/EditDialog.vue";
+import TailedTooltip from "@/components/TailedTooltip";
 
 export default {
   components: {
+    TailedTooltip,
     CreateDialog,
     EditDialog,
-    FreezeDialog,
-    ResetDialog,
     DeleteDialog,
-    ActivateDialog,
     DeleteManyDialog,
   },
-  name: 'management-user',
+  name: "management-user",
   data() {
     return {
       headers: [
-        { text: '用户名', value: 'username' },
-        { text: '邮箱', value: 'email' },
-        { text: '头像', value: 'avatar', sortable: false },
-        { text: '性别', value: 'gender' },
-        { text: '角色', value: 'roleNames', sortable: false },
-        { text: '状态', value: 'status' },
-        { text: '创建时间', value: 'createTime' },
-        { text: '操作', value: 'actions', align: 'center', sortable: false },
+        { text: "用户名", value: "username" },
+        { text: "角色", value: "roles", sortable: false },
+        { text: "状态", value: "status", align: "center" },
+        { text: "操作", value: "actions", align: "center", sortable: false },
       ],
-      users: [],
-      search: '',
-      selected: [],
+      items: [],
+      search: "",
+      selectedItems: [],
+      theItem: null,
       loading: false,
       // pagination at server
       currPage: 1,
@@ -197,16 +187,21 @@ export default {
   created() {
     this.getUsers();
   },
+  computed: {
+    tableHeight() {
+      return window.screen.height - 340;
+    },
+  },
   methods: {
     async getUsers() {
       // 恢复一些状态
-      this.selected = [];
+      this.selectedItems = [];
       this.deletingUser = -1;
       this.editingUser = {};
       this.freezingUser = {};
 
       this.loading = true;
-      this.users = (await getUsers()).data;
+      this.items = (await getUsers()).data;
       this.loading = false;
     },
   },

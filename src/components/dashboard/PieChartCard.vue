@@ -1,13 +1,13 @@
 <template>
-  <v-card>
+  <v-card flat>
     <v-card-text style="height: 350px" ref="chartContainer">
       <v-skeleton-loader v-if="loading" type="image,image" max-height="300px" />
     </v-card-text>
   </v-card>
 </template>
 <script>
-import * as echarts from 'echarts';
-import { getPieChartData } from '../../api/dashboard';
+import * as echarts from "echarts";
+import { getPieChartData } from "@/api/dashboard";
 
 export default {
   data() {
@@ -26,27 +26,27 @@ export default {
         const myChart = echarts.init(chartDom);
         const option = {
           title: {
-            text: 'Pie',
-            left: 'left',
+            text: "Pie",
+            left: "left",
           },
           tooltip: {
-            trigger: 'item',
+            trigger: "item",
           },
           legend: {
-            orient: 'horizentl',
-            bottom: 'bottom',
+            orient: "horizentl",
+            bottom: "bottom",
           },
           series: [
             {
-              name: 'Items',
-              type: 'pie',
-              radius: '50%',
+              name: "Items",
+              type: "pie",
+              radius: "50%",
               data: chartData,
               emphasis: {
                 itemStyle: {
                   shadowBlur: 10,
                   shadowOffsetX: 0,
-                  shadowColor: 'rgba(0, 0, 0, 0.5)',
+                  shadowColor: "rgba(0, 0, 0, 0.5)",
                 },
               },
             },

@@ -1,12 +1,26 @@
 <template>
   <v-container fill-height fluid>
     <v-row class="py-4" v-if="loading">
-      <v-col cols="12" md="3" sm="6" class="mb-md-0 mb-2" :key="index" v-for="(item, index) in 4">
+      <v-col
+        cols="12"
+        md="3"
+        sm="6"
+        class="mb-md-0 mb-2"
+        :key="index"
+        v-for="(item, index) in 4"
+      >
         <v-skeleton-loader type="list-item-three-line" />
       </v-col>
     </v-row>
     <v-row class="py-4" v-else>
-      <v-col cols="12" md="3" sm="6" class="mb-md-0 mb-2" :key="index" v-for="(item, index) in overviews">
+      <v-col
+        cols="12"
+        md="3"
+        sm="6"
+        class="mb-md-0 mb-2"
+        :key="index"
+        v-for="(item, index) in overviews"
+      >
         <overview-card v-bind="item" />
       </v-col>
     </v-row>
@@ -32,38 +46,38 @@
   </v-container>
 </template>
 <script>
-import LineChartCard from '../components/dashboard/LineChartCard.vue';
-import PieChartCard from '../components/dashboard/PieChartCard.vue';
-import ScatterChartCard from '../components/dashboard/ScatterChartCard.vue';
-import OverviewCard from '../components/dashboard/OverviewCard.vue';
-import SimpleTableCard from '../components/dashboard/SimpleTableCard.vue';
-import { getOverviews } from '../api/dashboard';
+import LineChartCard from "../components/dashboard/LineChartCard.vue";
+import PieChartCard from "../components/dashboard/PieChartCard.vue";
+import ScatterChartCard from "../components/dashboard/ScatterChartCard.vue";
+import OverviewCard from "../components/dashboard/OverviewCard.vue";
+import SimpleTableCard from "../components/dashboard/SimpleTableCard.vue";
+import { getOverviews } from "@/api/dashboard";
 
 const presetOverviews = [
   {
-    title: 'Robots',
-    color: 'teal',
-    icon: 'mdi-robot',
-    path: '/',
+    title: "Index A",
+    color: "teal",
+    icon: "mdi-robot",
+    path: "/",
   },
   {
-    title: 'Piplines',
-    color: 'warning',
-    icon: 'mdi-sitemap',
-    path: '/',
+    title: "Index B",
+    color: "warning",
+    icon: "mdi-sitemap",
+    path: "/",
   },
   {
-    title: 'Factories',
-    color: 'error',
-    icon: 'mdi-factory',
-    path: '/',
+    title: "Index C",
+    color: "error",
+    icon: "mdi-factory",
+    path: "/",
   },
   {
-    title: 'Capacity',
-    color: 'primary',
-    unit: 'GB',
-    icon: 'mdi-database',
-    path: '/',
+    title: "Index D",
+    color: "primary",
+    unit: "GB",
+    icon: "mdi-database",
+    path: "/",
   },
 ];
 
@@ -88,7 +102,9 @@ export default {
     async getOverviews() {
       // actully, meanings of our overview items are preset
       // so, we should do some filling
-      this.overviews = (await getOverviews()).data.map((d, i) => Object.assign(d, presetOverviews[i]) && d);
+      this.overviews = (await getOverviews()).data.map(
+        (d, i) => Object.assign(d, presetOverviews[i]) && d
+      );
       this.loading = false;
     },
   },

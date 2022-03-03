@@ -1,13 +1,13 @@
 <template>
-  <v-card>
+  <v-card flat>
     <v-card-text style="height: 450px" ref="chartContainer">
       <v-skeleton-loader v-if="loading" type="image,image" max-height="400px" />
     </v-card-text>
   </v-card>
 </template>
 <script>
-import * as echarts from 'echarts';
-import { getLineChartData } from '../../api/dashboard';
+import * as echarts from "echarts";
+import { getLineChartData } from "@/api/dashboard";
 
 export default {
   data() {
@@ -26,23 +26,23 @@ export default {
         const myChart = echarts.init(chartDom);
         const option = {
           title: {
-            text: 'Line',
-            left: 'left',
+            text: "Line",
+            left: "left",
           },
           xAxis: {
-            type: 'category',
-            data: chartData.map(cd => cd.name),
+            type: "category",
+            data: chartData.map((cd) => cd.name),
           },
           yAxis: {
-            type: 'value',
+            type: "value",
           },
           tooltip: {
             show: true,
           },
           series: [
             {
-              data: chartData.map(cd => cd.value),
-              type: 'line',
+              data: chartData.map((cd) => cd.value),
+              type: "line",
               smooth: true,
             },
           ],

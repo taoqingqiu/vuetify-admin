@@ -1,6 +1,10 @@
 <template>
-  <v-card class="align-self-stretch" style="width: 100%">
-    <v-skeleton-loader v-if="loading" type="list-item@12" class="pa-2"></v-skeleton-loader>
+  <v-card class="align-self-stretch" style="width: 100%" flat>
+    <v-skeleton-loader
+      v-if="loading"
+      type="list-item@12"
+      class="pa-2"
+    ></v-skeleton-loader>
     <template v-else>
       <v-card-title>Simple Table</v-card-title>
       <v-card-text>
@@ -25,7 +29,7 @@
   </v-card>
 </template>
 <script>
-import { getSimpleTableData } from '../../api/dashboard';
+import { getSimpleTableData } from "@/api/dashboard";
 
 export default {
   data() {

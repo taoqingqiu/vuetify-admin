@@ -5,7 +5,7 @@ const state = {
   notification: { show: false, content: "", loading: false, level: "" },
   loading: { isLoading: false, progress: 0 },
   navDrawer: true,
-  settingsDrawer: false
+  clipped: false,
 };
 
 const mutations = {
@@ -18,20 +18,20 @@ const mutations = {
   SET_NAV_DRAWER: (state, navDrawer) => {
     state.navDrawer = navDrawer;
   },
-  SET_SETTINGS_DRAWER: (state, settingsDrawer) => {
-    state.settingsDrawer = settingsDrawer;
-  }
+  SET_CLIPPED: (state, payload) => {
+    state.clipped = payload;
+  },
 };
 
 const actions = {
   dismissNotification: ({ commit }) => {
     commit("SET_NOTIFICATION", { show: false, content: "", loading: false });
-  }
+  },
 };
 
 export default {
   namespaced: true,
   state,
   mutations,
-  actions
+  actions,
 };

@@ -1,7 +1,7 @@
-const ghPages = process.env.NODE_ENV === 'ghPages';
+const ghPages = process.env.NODE_ENV === "ghPages";
 
 module.exports = {
-  transpileDependencies: ['vuetify'],
+  transpileDependencies: ["vuetify"],
   devServer: {
     disableHostCheck: true,
     // proxy: {
@@ -14,5 +14,5 @@ module.exports = {
     //   },
     // },
   },
-  publicPath: ghPages ? '/vuetify-admin/' : '/', // to cater to github pages
+  publicPath: ghPages ? "/vuetify-admin/" : "/", // to cater to github pages
 };
