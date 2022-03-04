@@ -18,7 +18,9 @@
       <v-icon v-else :color="notification.level" class="mr-2">
         {{ snackerBarIconDict[notification.level] }}
       </v-icon>
-      {{ notification.content }}
+      <span>
+        {{ notification.content }}
+      </span>
     </div>
   </v-snackbar>
 </template>

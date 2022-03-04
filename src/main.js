@@ -13,7 +13,7 @@ if (
   process.env.NODE_ENV === "ghPages" ||
   process.env.NODE_ENV === "development"
 )
-  import("./api/mock");
+  import("./mock");
 
 new Vue({
   router,

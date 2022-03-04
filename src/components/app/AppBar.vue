@@ -24,14 +24,16 @@
     <v-btn icon @click="$vuetify.theme.dark = !$vuetify.theme.dark">
       <v-icon>
         {{
-          $vuetify.theme.dark ? "mdi-white-balance-sunny" : "mdi-weather-night"
+          $vuetify.theme.dark
+            ? "mdi-white-balance-sunny"
+            : "mdi-moon-waxing-crescent"
         }}
       </v-icon>
     </v-btn>
     <v-btn icon @click="$store.commit('app/SET_CLIPPED', !clipped)">
       <v-icon>
         {{
-          clipped ? "$vuetify.icons.layout-clipped" : "$vuetify.icons.layout"
+          !clipped ? "$vuetify.icons.layout-clipped" : "$vuetify.icons.layout"
         }}
       </v-icon>
     </v-btn>
@@ -39,7 +41,7 @@
     <!-- avatar -->
     <v-menu offset-y>
       <template v-slot:activator="{ on, attrs }">
-        <v-btn icon v-on="on" v-bind="attrs" class="mr-1">
+        <v-btn icon v-on="on" v-bind="attrs" class="mr-1" light>
           <v-avatar size="32px" color="rgb(207, 224, 214)">
             {{ $store.state.user.username[0] || "" }}
           </v-avatar>

@@ -1,6 +1,6 @@
 {
-  "name": "Vuetify Admin",
-  "version": "0.0.2",
+  "name": "vuetify-admin",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",

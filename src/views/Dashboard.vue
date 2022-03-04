@@ -52,34 +52,7 @@ import ScatterChartCard from "../components/dashboard/ScatterChartCard.vue";
 import OverviewCard from "../components/dashboard/OverviewCard.vue";
 import SimpleTableCard from "../components/dashboard/SimpleTableCard.vue";
 import { getOverviews } from "@/api/dashboard";
-
-const presetOverviews = [
-  {
-    title: "Index A",
-    color: "teal",
-    icon: "mdi-robot",
-    path: "/",
-  },
-  {
-    title: "Index B",
-    color: "warning",
-    icon: "mdi-sitemap",
-    path: "/",
-  },
-  {
-    title: "Index C",
-    color: "error",
-    icon: "mdi-factory",
-    path: "/",
-  },
-  {
-    title: "Index D",
-    color: "primary",
-    unit: "GB",
-    icon: "mdi-database",
-    path: "/",
-  },
-];
+import indexes from "@/assets/overviewIndexes.json";
 
 export default {
   components: {
@@ -92,6 +65,7 @@ export default {
   data() {
     return {
       overviews: [],
+      indexes,
       loading: true,
     };
   },
@@ -103,7 +77,7 @@ export default {
       // actully, meanings of our overview items are preset
       // so, we should do some filling
       this.overviews = (await getOverviews()).data.map(
-        (d, i) => Object.assign(d, presetOverviews[i]) && d
+        (d, i) => Object.assign(d, this.indexes[i]) && d
       );
       this.loading = false;
     },

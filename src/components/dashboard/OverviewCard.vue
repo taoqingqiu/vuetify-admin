@@ -2,7 +2,9 @@
   <v-card flat>
     <v-row class="px-5">
       <v-col cols="8">
-        <v-card-title class="pa-0 text-uppercase">{{ title }}</v-card-title>
+        <v-card-title class="pa-0 text-uppercase text-subtitle-2">{{
+          title
+        }}</v-card-title>
         <div>
           <span class="text-h5 mr-1">{{ count }}</span>
           <span class="grey--text"

@@ -81,7 +81,6 @@
           其他方式<a href="#" style="color: white" class="mx-1">登录</a>
         </div>
       </v-card-actions>
-      <!-- <v-progress-linear v-if="" rounded absolute top color="info" indeterminate></v-progress-linear> -->
     </v-card>
     <v-toolbar
       style="
@@ -101,13 +100,14 @@
       <v-spacer />
       <div class="text-right">
         By
-        <a href="https://github.com/taoqingqiu" style="color: #fff">Qingqiu</a
-        ><br />version 0.0.2
+        <a href="https://github.com/taoqingqiu" style="color: #fff">Qingqiu</a>
+        <br />version {{ version }}
       </div>
     </v-toolbar>
   </v-container>
 </template>
 <script>
+import { version } from "../../package.json";
 import md5 from "md5";
 import { getToken, getAuthorities } from "@/api/auth";
 
@@ -122,6 +122,7 @@ export default {
       warningAlert: false,
       errorAlert: false,
       indications: { warning: "", error: "" },
+      version,
     };
   },
   methods: {
@@ -143,7 +144,7 @@ export default {
           sessionStorage.setItem("auth-token", response.data.token);
           sessionStorage.setItem("signed-in-user", this.username);
           await this.$store.dispatch("user/setUser", this.username);
-          this.$router.push("/");
+          await this.$router.push("/");
         } else {
           this.indications.error = response.message;
           this.errorAlert = true;
