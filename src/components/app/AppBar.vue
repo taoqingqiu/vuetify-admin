@@ -43,7 +43,7 @@
       <template v-slot:activator="{ on, attrs }">
         <v-btn icon v-on="on" v-bind="attrs" class="mr-1" light>
           <v-avatar size="32px" color="rgb(207, 224, 214)">
-            {{ $store.state.user.username[0] || "" }}
+            {{ signedInUser[0] || "" }}
           </v-avatar>
         </v-btn>
       </template>
@@ -55,7 +55,7 @@
       >
         <v-list-item class="text-caption py-0">
           <v-list-item-title class="text-truncate">
-            {{ $store.state.user.username }}
+            {{ signedInUser }}
           </v-list-item-title>
         </v-list-item>
         <v-divider />
@@ -77,6 +77,7 @@
   </v-app-bar>
 </template>
 <script>
+import { removeAccessToken } from "@/utils/storage-util";
 export default {
   data: () => ({
     settingsDrawer: false,
@@ -88,6 +89,9 @@ export default {
     clipped() {
       return this.$store.state.app.clipped;
     },
+    signedInUser() {
+      return this.$store.state.auth.signedInUser;
+    },
   },
   methods: {
     showNavDrawer() {
@@ -97,8 +101,7 @@ export default {
       );
     },
     signOut() {
-      sessionStorage.removeItem("auth-token");
-      sessionStorage.removeItem("signed-in-user");
+      removeAccessToken();
       this.$router.push("/sign-in");
     },
   },

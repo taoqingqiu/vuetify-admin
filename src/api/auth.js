@@ -1,17 +1,25 @@
-import axios from '../utils/axios';
+import axios from "../utils/axios";
 
 /**
- * 获取 token 实则为登录
+ * Get access-token
  *
  * @param {*} username
  * @param {*} password
  * @returns
  */
-export const getToken = (username, password) => axios.get('/auth/token', { params: { username, password } });
+export const getToken = (username, password) =>
+  axios.get("/auth/token", { params: { username, password } });
 
 /**
- * 获取当前用户的权限（菜单、操作树）
+ * Get permissions
  *
  * @returns
  */
-export const getAuthorities = () => axios.get('/auth/authorities');
+export const getPermissions = () => axios.get("/auth/permissions");
+
+/**
+ * Get info of signed-in user
+ *
+ * @returns
+ */
+export const getUserInfo = () => axios.get("/auth/user-info");

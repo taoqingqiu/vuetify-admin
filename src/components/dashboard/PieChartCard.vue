@@ -22,7 +22,7 @@ export default {
     async drawChart() {
       const chartDom = this.$refs.chartContainer;
       if (chartDom) {
-        const chartData = (await getPieChartData()).data;
+        const chartData = (await getPieChartData()).result;
         const myChart = echarts.init(chartDom);
         const option = {
           title: {

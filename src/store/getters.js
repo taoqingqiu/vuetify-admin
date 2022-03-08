@@ -1,7 +1,8 @@
-import { flattenMenuTree } from "@/utils/tree-util";
-
 export default {
-  authMenus: (state) =>
-    state.user.menus ? flattenMenuTree(state.user.menus) : [],
-  dev: () => process.env.NODE_ENV === "development",
+  accessibleRoutes: (state) =>
+    state.auth.permissions
+      .filter((p) => p.includes(":visit"))
+      .map((p) => p.split(":visit").shift()),
+  permissions: (state) =>
+    state.auth.permissions.filter((p) => !p.includes(":visit")),
 };

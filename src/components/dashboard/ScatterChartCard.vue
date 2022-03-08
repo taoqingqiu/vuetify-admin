@@ -20,7 +20,7 @@ export default {
   },
   methods: {
     async drawChart() {
-      const chartData = (await getScatterChartData()).data;
+      const chartData = (await getScatterChartData()).result;
       const chartDom = this.$refs.chartContainer;
       if (chartDom) {
         const myChart = echarts.init(chartDom);

@@ -43,7 +43,7 @@ export default {
   },
   methods: {
     async getItems() {
-      this.items = (await getSimpleTableData()).data;
+      this.items = (await getSimpleTableData()).result;
       this.loading = false;
     },
   },

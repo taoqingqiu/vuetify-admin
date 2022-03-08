@@ -1,11 +1,12 @@
 import { createResponse } from "../response-util";
 
 export default {
-  "get|/api/auth/token": createResponse("auth-token"),
+  "get|/api/auth/token": createResponse("access-token"),
+  "get|/api/auth/user-info": createResponse("Admin"),
   "get|/api/auth/permissions": createResponse([
     "/dashboard:visit",
-    "/tree/levels/demo:visit",
-    "/tree/levels-another/demo:visit",
+    "/three/levels/demo:visit",
+    "/three/levels-another/demo:visit",
     "/system/user-management:visit",
     "/system/role-management:visit",
     "user:retrieve",

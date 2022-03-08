@@ -1,11 +1,9 @@
-/**
- * 系统层面的一些状态
- */
 const state = {
   notification: { show: false, content: "", loading: false, level: "" },
   loading: { isLoading: false, progress: 0 },
   navDrawer: true,
   clipped: false,
+  error: null,
 };
 
 const mutations = {
@@ -21,11 +19,8 @@ const mutations = {
   SET_CLIPPED: (state, payload) => {
     state.clipped = payload;
   },
-};
-
-const actions = {
-  dismissNotification: ({ commit }) => {
-    commit("SET_NOTIFICATION", { show: false, content: "", loading: false });
+  SET_ERROR: (state, error) => {
+    state.error = error;
   },
 };
 
@@ -33,5 +28,4 @@ export default {
   namespaced: true,
   state,
   mutations,
-  actions,
 };

@@ -22,19 +22,15 @@
       <v-divider class="my-1" />
     </template>
     <v-list nav dense expand>
-      <template
-        v-for="(item, index) in $store.state.user.menus
-          .concat()
-          .sort((a, b) => a.order - b.order)"
-      >
+      <template v-for="(item, index) in accessibleTree">
         <v-list-item :to="item.path" :key="index" v-if="!item.children">
           <v-list-item-icon v-if="!mini">
-            <v-icon>{{ item.icon }}</v-icon>
+            <v-icon>{{ item.meta.icon }}</v-icon>
           </v-list-item-icon>
           <tailed-tooltip v-else right>
             <template #activator="{ attrs, on }">
               <v-list-item-icon v-on="on" v-bind="attrs">
-                <v-icon>{{ item.icon }}</v-icon>
+                <v-icon>{{ item.meta.icon }}</v-icon>
               </v-list-item-icon>
             </template>
             <span> {{ item.name }} </span>
@@ -46,7 +42,7 @@
         <template v-else>
           <v-list-group
             :key="index"
-            :prepend-icon="item.icon"
+            :prepend-icon="item.meta.icon"
             no-action
             v-if="!mini"
             :value="true"
@@ -100,7 +96,7 @@
                         v-bind="_attrs"
                         v-on="_on"
                         @click="tooltip[index] = false"
-                        >{{ item.icon }}</v-icon
+                        >{{ item.meta.icon }}</v-icon
                       >
                     </template>
                     {{ item.name }}
@@ -168,6 +164,8 @@
   </v-navigation-drawer>
 </template>
 <script>
+import { routes } from "@/router";
+
 export default {
   components: {
     TailedTooltip: () => import("@/components/TailedTooltip.vue"),
@@ -180,6 +178,40 @@ export default {
   computed: {
     clipped() {
       return this.$store.state.app.clipped;
+    },
+    accessibleRoutes() {
+      return this.$store.getters.accessibleRoutes;
+    },
+    accessibleTree() {
+      return this.buildAccessibleTree(routes);
+    },
+  },
+  methods: {
+    /**
+     * Build a route tree consists of accessible routes.
+     * NB. make sure none empty children attribute (children: []) exists
+     * @param tree
+     * @returns {*[]}
+     */
+    buildAccessibleTree(tree) {
+      const result = [];
+      tree.forEach((t) => {
+        if (!t.children) {
+          !t.path.includes(":") &&
+            this.accessibleRoutes.includes(t.path) &&
+            result.push(t);
+        } else {
+          const childrenResult = this.buildAccessibleTree(t.children);
+          if (childrenResult.length) {
+            const nodeNew = JSON.parse(JSON.stringify(t));
+            delete nodeNew["children"];
+            nodeNew["children"] = childrenResult;
+            result.push(t);
+          }
+        }
+      });
+
+      return result;
     },
   },
 };

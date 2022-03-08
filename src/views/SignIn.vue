@@ -61,7 +61,12 @@
             @click:append="passwordType = !passwordType"
             @keydown="whenPressingEnter"
           ></v-text-field>
-          <v-checkbox class="mb-4" label="记住我的登录信息"> </v-checkbox>
+          <v-checkbox
+            class="mb-4"
+            label="记住我的登录信息"
+            v-model="rememberMe"
+          >
+          </v-checkbox>
         </v-form>
         <v-btn color="primary" @click="signIn" block> 登录 </v-btn>
       </v-card-text>
@@ -108,8 +113,7 @@
 </template>
 <script>
 import { version } from "../../package.json";
-import md5 from "md5";
-import { getToken, getAuthorities } from "@/api/auth";
+import { getToken } from "@/api/auth";
 
 export default {
   data() {
@@ -118,7 +122,7 @@ export default {
       password: "",
       signingIn: false,
       passwordType: true,
-      readAndAgree: false,
+      rememberMe: false,
       warningAlert: false,
       errorAlert: false,
       indications: { warning: "", error: "" },
@@ -131,19 +135,19 @@ export default {
       const valid = this.$refs["signInForm"].validate();
       if (valid) {
         this.signingIn = true;
-        const response = await getToken(this.username, md5(this.password));
-        if (response.status === 0) {
-          if (process.env.NODE_ENV === "development") {
-            const { menus, actions } = (await getAuthorities()).data;
-            sessionStorage.setItem(
-              "menus-actions",
-              JSON.stringify({ menus, actions })
-            );
-          }
-
-          sessionStorage.setItem("auth-token", response.data.token);
-          sessionStorage.setItem("signed-in-user", this.username);
-          await this.$store.dispatch("user/setUser", this.username);
+        const response = await getToken(this.username, this.password);
+        if (response.code === 0) {
+          // if (process.env.NODE_ENV === "development") {
+          //   const { menus, actions } = (await getPermissions()).data;
+          //   sessionStorage.setItem(
+          //     "menus-actions",
+          //     JSON.stringify({ menus, actions })
+          //   );
+          // } else {
+          // }
+          this.rememberMe
+            ? localStorage.setItem("va-access-token", response.token)
+            : sessionStorage.setItem("va-access-token", response.token);
           await this.$router.push("/");
         } else {
           this.indications.error = response.message;

@@ -7,7 +7,7 @@
         sm="6"
         class="mb-md-0 mb-2"
         :key="index"
-        v-for="(item, index) in 4"
+        v-for="(_, index) in 4"
       >
         <v-skeleton-loader type="list-item-three-line" />
       </v-col>
@@ -76,7 +76,7 @@ export default {
     async getOverviews() {
       // actully, meanings of our overview items are preset
       // so, we should do some filling
-      this.overviews = (await getOverviews()).data.map(
+      this.overviews = (await getOverviews()).result.map(
         (d, i) => Object.assign(d, this.indexes[i]) && d
       );
       this.loading = false;

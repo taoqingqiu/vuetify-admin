@@ -1,11 +1,20 @@
-export const getAuthToken = () =>
-  sessionStorage.getItem("auth-token") || localStorage.getItem("auth-token");
+const accessTokenKey = "va-access-token";
 
-export const checkRememberMe = () => !!localStorage.getItem("auth-token");
+export const getAccessToken = () =>
+  sessionStorage.getItem(accessTokenKey) ||
+  localStorage.getItem(accessTokenKey);
 
-export const removeAuthToken = () => {
-  sessionStorage.removeItem("auth-token");
-  localStorage.removeItem("auth-token");
+export const updateAccessToken = (token) => {
+  if (localStorage.getItem(accessTokenKey)) {
+    localStorage.setItem(accessTokenKey, token);
+  } else {
+    sessionStorage.setItem(accessTokenKey, token);
+  }
+};
+
+export const removeAccessToken = () => {
+  sessionStorage.removeItem(accessTokenKey);
+  localStorage.removeItem(accessTokenKey);
 };
 
 export const getStorageItem = (key) =>
@@ -14,10 +23,4 @@ export const getStorageItem = (key) =>
 export const removeStorageItem = (key) => {
   sessionStorage.removeItem(key);
   localStorage.removeItem(key);
-};
-
-export const resetAuthorities = () => {
-  removeAuthToken();
-  removeStorageItem("signed-in-user");
-  removeStorageItem("menus-authorities");
 };
