@@ -1,27 +1,22 @@
 export default [
   {
-    name: "系统管理",
+    name: "System",
     path: "/system",
+    component: () => import("@/views/Barren"),
     children: [
       {
-        path: "/system/user-management",
-        name: "用户管理",
+        path: "user-management",
+        name: "User Management",
         component: () => import("@/views/system/UserManagement.vue"),
-        meta: {
-          order: 1,
-        },
       },
       {
-        path: "/system/role-management",
-        name: "角色管理",
+        path: "role-management",
+        name: "Role Management",
         component: () => import("@/views/system/RoleManagement.vue"),
-        meta: {
-          order: 2,
-        },
       },
     ],
     meta: {
-      icon: "mdi-application-settings",
+      icon: "mdi-cog",
       order: 2,
     },
   },

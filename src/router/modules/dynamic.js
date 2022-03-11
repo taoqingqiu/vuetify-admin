@@ -1,6 +1,6 @@
 export default [
   {
-    name: "动态路由示例",
+    name: "Dynamic route demo",
     path: "/dynamic-route-demo",
     component: () => import("@/views/dynamic-route/DynamicRouteDemo.vue"),
     meta: {
@@ -9,8 +9,8 @@ export default [
     },
   },
   {
-    name: "动态路由示例",
+    name: "Dynamic route demo child",
     path: "/dynamic-route-demo/:id",
-    component: () => import("@/views/dynamic-route/DynamicRouteDemo.vue"),
+    component: () => import("@/views/dynamic-route/DynamicRouteDemoChild.vue"),
   },
 ];

@@ -3,7 +3,6 @@ const state = {
   loading: { isLoading: false, progress: 0 },
   navDrawer: true,
   clipped: false,
-  error: null,
 };
 
 const mutations = {
@@ -19,8 +18,16 @@ const mutations = {
   SET_CLIPPED: (state, payload) => {
     state.clipped = payload;
   },
-  SET_ERROR: (state, error) => {
-    state.error = error;
+};
+
+const actions = {
+  dismissNotification({ commit }) {
+    commit("SET_NOTIFICATION", {
+      show: false,
+      content: "",
+      loading: false,
+      level: "",
+    });
   },
 };
 
@@ -28,4 +35,5 @@ export default {
   namespaced: true,
   state,
   mutations,
+  actions,
 };

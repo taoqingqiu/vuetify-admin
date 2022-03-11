@@ -1,22 +1,15 @@
 <template>
-  <v-container
-    fluid
-    fill-height
-    :class="['d-flex', { white: !$vuetify.theme.dark }]"
-  >
-    <v-col cols="12" md="3" class="d-flex align-self-stretch" ref="roles">
-      <v-card style="width: 100%" flat outlined class="px-2">
+  <v-container fluid fill-height class="d-flex">
+    <v-col
+      cols="12"
+      md="3"
+      class="d-flex align-self-stretch pa-0 pr-1"
+      ref="roles"
+    >
+      <v-card style="width: 100%" flat>
         <v-card-title>
           <v-btn color="primary" small @click="createDialog = true">
-            新增
-          </v-btn>
-          <v-btn
-            color="primary"
-            small
-            @click="editDialog = true"
-            class="ml-1 ml-md-2"
-          >
-            编辑
+            New
           </v-btn>
           <v-btn
             color="error"
@@ -25,7 +18,7 @@
             :disabled="selectedRoles.length === 0"
             @click="deleteDialog = true"
           >
-            删除
+            Delete
             <span v-if="selectedRoles.length > 0"
               >({{ selectedRoles.length }})
             </span>
@@ -36,38 +29,58 @@
           <v-toolbar flat>
             <v-text-field
               v-model="keyword"
-              solo
-              flat
               dense
-              outlined
               append-icon="mdi-magnify"
-              label="输入关键词以筛选"
+              label="Filter by keyword"
               single-line
               hide-details
               clearable
             ></v-text-field>
           </v-toolbar>
         </v-card-title>
-        <v-card-text class="pa-0">
+        <v-card-text
+          class="pa-0 overflow-auto"
+          :style="{ maxHeight: listHeight + 'px' }"
+        >
           <v-list dense nav>
-            <v-list-item-group color="primary" mandatory v-model="activeRole">
-              <v-list-item v-for="(role, index) in roles" :key="index">
-                <v-list-item-action>
+            <v-list-item-group v-model="activeRole">
+              <template v-for="(role, index) in roles">
+                <v-list-item
+                  :key="index"
+                  :value="role.id"
+                  color="primary"
+                  class="my-0"
+                >
                   <v-checkbox
+                    class="customized-checkbox"
+                    dense
+                    hide-details
                     color="primary"
-                    @click.stop.prevent="selectRole(role.id)"
-                    :input-value="selectedRoles.includes(role.id)"
+                    v-model="selectedRoles"
+                    :value="role.id"
+                    @click.stop.prevent
                   />
-                </v-list-item-action>
-                <v-list-item-content>
-                  <v-list-item-title :title="`${role.name} (${role.symbol})`">
-                    {{ role.name }} ({{ role.symbol }})
-                  </v-list-item-title>
-                  <v-list-item-subtitle>{{
-                    role.description || "暂无描述~"
-                  }}</v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list-item>
+                  <v-list-item-content>
+                    <v-list-item-title :title="role.name">
+                      {{ role.name }}
+                    </v-list-item-title>
+                    <v-list-item-subtitle>
+                      {{ role.description || "暂无描述~" }}
+                    </v-list-item-subtitle>
+                  </v-list-item-content>
+                  <v-btn icon x-small color="primary">
+                    <v-icon x-small>mdi-pencil</v-icon>
+                  </v-btn>
+                  <v-btn icon x-small color="error">
+                    <v-icon x-small>mdi-trash-can</v-icon>
+                  </v-btn>
+                </v-list-item>
+                <v-divider
+                  :key="'divider-' + index"
+                  v-if="index < roles.length - 1"
+                  class="ma-2"
+                />
+              </template>
             </v-list-item-group>
           </v-list>
           <v-overlay absolute v-if="loadingRoles" opacity=".07">
@@ -78,39 +91,91 @@
         </v-card-text>
       </v-card>
     </v-col>
-    <v-col cols="12" md="9" class="d-flex align-self-stretch">
-      <v-card style="width: 100%" flat outlined class="pb-16">
-        <v-data-table></v-data-table>
-        <v-toolbar flat bottom absolute>
-          <v-btn small color="primary" @click="authorizeAll"> 全选 </v-btn>
-          <v-btn
-            small
-            class="ml-2"
-            :disabled="!modified"
-            color="primary"
-            @click="saveAuthority"
-            :loading="savingAuthorities"
-          >
-            保存
-          </v-btn>
-          <v-btn
-            small
-            class="ml-2"
-            :disabled="!modified"
-            color="error"
-            @click="resetAuthority"
-          >
-            重置
-          </v-btn>
-        </v-toolbar>
-        <v-overlay absolute v-if="loadingMenus" opacity=".07">
-          <v-alert color="primary" text>
-            <v-progress-circular indeterminate />
-          </v-alert>
-        </v-overlay>
+    <v-col
+      cols="12"
+      md="9"
+      class="d-flex flex-column align-self-stretch pa-0 pl-1"
+    >
+      <v-card
+        v-if="!activeRole"
+        class="
+          align-self-stretch
+          flex-grow-1
+          d-flex
+          align-center
+          justify-center
+        "
+        flat
+      >
+        Click certain role to edit permissions.
+      </v-card>
+      <v-data-table
+        v-else
+        class="flex-grow-1 border-radius-table"
+        :headers="headers"
+        :items="permissions"
+        :height="tableHeight"
+        :loading="loadingPermissions"
+        hide-default-footer
+        disable-pagination
+        fixed-header
+      >
+        <template #[`item.visit`]="{ item: { visit } }">
+          <v-checkbox
+            dense
+            hide-details
+            v-model="selectedPermissions"
+            :label="i.text"
+            v-for="(i, idx) in visit"
+            :key="idx"
+            :value="i.value"
+            class="d-inline-block mr-4 customized-checkbox black-label-checkbox"
+          />
+        </template>
+        <template #[`item.action`]="{ item: { action } }">
+          <v-checkbox
+            dense
+            hide-details
+            v-model="selectedPermissions"
+            :label="i.text"
+            v-for="(i, idx) in action"
+            :key="idx"
+            :value="i.value"
+            class="d-inline-block mr-4 customized-checkbox black-label-checkbox"
+          />
+        </template>
+      </v-data-table>
+
+      <v-card flat class="d-flex align-center mt-2 px-4 py-2" width="100%">
+        <v-btn
+          small
+          color="primary"
+          :disabled="!activeRole"
+          @click="selectAllPermissions"
+        >
+          Select All
+        </v-btn>
+        <v-btn
+          color="primary"
+          :disabled="!activeRole || !modified"
+          small
+          class="ml-1 ml-md-2"
+          @click="updateBoundPermissions"
+        >
+          Save
+        </v-btn>
+        <v-btn
+          color="error"
+          :disabled="!activeRole || !modified"
+          small
+          class="ml-1 ml-md-2"
+          @click="getBoundPermissions(activeRole)"
+        >
+          Reset
+        </v-btn>
       </v-card>
     </v-col>
-    <create-dialog v-model="createDialog" :menus="menus" @reload="getRoles" />
+    <create-dialog v-model="createDialog" @reload="getRoles" />
     <delete-dialog
       v-model="deleteDialog"
       :roles="selectedRoles"
@@ -124,34 +189,33 @@
   </v-container>
 </template>
 <script>
-import { getMenuList } from "../../api/menu";
-import {
-  getAuthorizedMenus,
-  getRoles,
-  updateRoleAuthorities,
-} from "../../api/role";
-import DeleteDialog from "../../components/system/role-management/DeleteDialog.vue";
-import CreateDialog from "../../components/system/role-management/CreateDialog.vue";
-import { getParentNode, flattenMenuTree } from "../../utils/tree-util";
-import EditDialog from "../../components/system/role-management/EditDialog.vue";
+import { getPermissions, getRoles, updatePermissions } from "@/api/role";
+import DeleteDialog from "@/components/system/role-management/DeleteDialog.vue";
+import CreateDialog from "@/components/system/role-management/CreateDialog.vue";
+import EditDialog from "@/components/system/role-management/EditDialog.vue";
+import permissions from "@/assets/permissions.json";
 
 export default {
-  name: "management-role",
+  name: "RoleManagement",
   components: { CreateDialog, DeleteDialog, EditDialog },
   data() {
     return {
       // roles
-      activeRole: "",
+      activeRole: null,
       roles: [],
       selectedRoles: [],
-      // tree related
-      authorized: [],
-      authorizedOrigin: [],
-      menus: [],
-      // loading
       loadingRoles: false,
-      loadingMenus: false,
-      savingAuthorities: false,
+      loadingPermissions: false,
+      // permissions
+      headers: [
+        { text: "Module", value: "module" },
+        { text: "Visit", value: "visit", sortable: false },
+        { text: "Action", value: "action", sortable: false },
+      ],
+      permissions,
+      selectedPermissions: [],
+      selectedPermissionsOrigin: [],
+      updating: false,
       // dialogs
       createDialog: false,
       deleteDialog: false,
@@ -162,16 +226,16 @@ export default {
     };
   },
   mounted() {
-    // vuetify 会调整布局，所以延时 200ms 再获取 height
-    // 而为了获取到 flex 布局自动撑满的 height，需要在获取 maxHeight 之后才获取所有角色、菜单树
-    setTimeout(() => {
-      this.getRoles();
-      this.getMenuList();
-    }, 200);
+    this.getRoles();
   },
   watch: {
     activeRole(val) {
-      this.getAuthorizedMenus(this.roles[val].id);
+      if (val) {
+        this.getBoundPermissions();
+      } else {
+        this.selectedPermissions = [];
+        this.selectedPermissionsOrigin = [];
+      }
     },
     keyword(val) {
       if (val === null) {
@@ -180,105 +244,57 @@ export default {
         this.filterRole(val);
       }
     },
-    roles(val) {
-      this.selectedRoles = this.selectedRoles.filter((sr) =>
-        val.some((r) => r.id === sr)
-      );
-    },
   },
   computed: {
     modified() {
-      return JSON.stringify(this.authorized) !== this.authorizedOrigin;
+      return (
+        JSON.stringify(this.selectedPermissions) !==
+        JSON.stringify(this.selectedPermissionsOrigin)
+      );
+    },
+    tableHeight() {
+      return window.screen.height - 290;
+    },
+    listHeight() {
+      return window.screen.height - 370;
     },
   },
   methods: {
-    /**
-     * 由于 treeview 的选择模式为 ‘leaf’
-     * 故需要从已授权菜单中，去掉所有“父”节点（不然由于选种模式，其下所有节点都处于 checked 状态）
-     */
-    compressAuthorized(authorizedArr) {
-      let resultArr = [...authorizedArr];
-      authorizedArr.forEach((ar) => {
-        const parent = getParentNode(this.menus, ar);
-        parent && (resultArr = resultArr.filter((r) => r !== parent.id));
-      });
-      return resultArr;
-    },
-    expandAuthorized(authorizedArr) {
-      let resultArr = [...authorizedArr];
-      authorizedArr.forEach((ar) => {
-        const parent = getParentNode(this.menus, ar);
-        if (parent) {
-          resultArr.push(...this.expandAuthorized([parent.id]));
-        }
-      });
-
-      resultArr = [...new Set(resultArr)];
-
-      return resultArr;
-    },
-    authorizeAll() {
-      this.authorized = this.compressAuthorized(
-        flattenMenuTree(this.menus, "id")
+    selectAllPermissions() {
+      this.selectedPermissions = this.permissions.reduce(
+        (pre, curr) => [
+          ...pre,
+          ...(curr.visit ? curr.visit.map((v) => v.value) : []),
+          ...(curr.action ? curr.action.map((a) => a.value) : []),
+        ],
+        []
       );
     },
-    async saveAuthority() {
-      this.savingAuthorities = true;
-      const expandedArr = this.expandAuthorized(this.authorized);
-      await updateRoleAuthorities(this.roles[this.activeRole].id, expandedArr);
-      this.authorizedOrigin = JSON.stringify(this.authorized);
-      this.savingAuthorities = false;
+    async updateBoundPermissions() {
+      this.updating = true;
+      await updatePermissions(this.activeRole, this.selectedPermissions);
+      this.updating = false;
 
-      // notify
-      this.$notify.success("权限已保存！");
+      this.$notify.success("Update saved!");
+      this.selectedPermissionsOrigin = [...this.selectedPermissions];
     },
-    resetAuthority() {
-      this.authorized = JSON.parse(this.authorizedOrigin);
-    },
-    selectRole(roleId) {
-      if (this.selectedRoles.includes(roleId)) {
-        this.selectedRoles = this.selectedRoles.filter((sr) => sr !== roleId);
-      } else {
-        this.selectedRoles.push(roleId);
-      }
+    async getBoundPermissions() {
+      this.loadingPermissions = true;
+      this.selectedPermissions = (await getPermissions(this.activeRole)).result;
+      this.selectedPermissionsOrigin = [...this.selectedPermissions];
+      this.loadingPermissions = false;
     },
     async getRoles() {
       this.loadingRoles = true;
-      this.roles = (await getRoles()).data;
+      this.roles = (await getRoles()).result;
       this.rolesQuantity = JSON.parse(JSON.stringify(this.roles));
-
-      // selected 中，已然不再的角色要滤掉
-      const allRoles = this.roles.map((r) => r.id);
-      this.selectedRoles = this.selectedRoles.filter((sr) =>
-        allRoles.includes(sr)
-      );
       this.loadingRoles = false;
-    },
-    async getMenuList() {
-      this.loadingMenus = true;
-      this.menus = (await getMenuList()).data;
-      this.loadingMenus = false;
-    },
-    async getAuthorizedMenus(roleId) {
-      this.loadingMenus = true;
-      this.authorized = this.compressAuthorized(
-        (await getAuthorizedMenus(roleId)).data
-      );
 
-      // 实践表明，初始时，直接连续赋值这二位
-      // 会影响 computed - modified 的计算结果，故 nextTick
-      this.$nextTick(() => {
-        this.authorizedOrigin = JSON.stringify(this.authorized);
-      });
-
-      this.loadingMenus = false;
+      await this.$store.dispatch("app/dismissNotification");
     },
-    /**
-     * 筛选角色
-     */
     filterRole(keyword) {
       this.roles = this.rolesQuantity.filter((r) =>
-        (r.roleName + r.description + r.roleCode).includes(keyword)
+        (r.name + r.description).includes(keyword)
       );
     },
   },

@@ -7,7 +7,7 @@
   >
     <v-card
       :loading="signingIn"
-      class="col-lg-4 col-sm-5 col-xl-3 py-0"
+      class="col-lg-4 col-sm-5 col-xl-3 pt-0"
       style="
         margin-bottom: 48px;
         background-color: #17263d;
@@ -15,18 +15,15 @@
       "
       dark
     >
-      <v-card-text class="text-center pt-6">
-        <v-img
-          src="https://cdn.vuetifyjs.com/docs/images/logos/vuetify-logo-light.svg"
-          class="d-inline-block"
-          max-width="48"
-        ></v-img>
-        <div
-          class="text-h5 mb-4"
-          style="color: #fff; letter-spacing: 2px !important"
-        >
-          Vuetify Admin
-        </div>
+      <v-card-text>
+        <v-row class="align-center justify-center mt-2 mb-3">
+          <v-img
+            src="https://cdn.vuetifyjs.com/docs/images/logos/vuetify-logo-light.svg"
+            class="mr-2"
+            max-width="32"
+          ></v-img>
+          <span class="text-h5" style="color: #fff"> Vuetify Admin </span>
+        </v-row>
 
         <v-alert
           text
@@ -45,47 +42,42 @@
           >{{ indications.error }}</v-alert
         >
         <v-form ref="signInForm" lazy-validation>
-          <v-text-field
-            v-model="username"
-            :rules="[(v) => !!v || '账号不能为空！']"
-            label="账号*"
-            required
-          ></v-text-field>
-          <v-text-field
-            :type="passwordType ? 'password' : 'text'"
-            v-model="password"
-            :rules="[(v) => !!v || '密码不能为空！']"
-            label="密码*"
-            required
-            :append-icon="passwordType ? 'mdi-eye-off' : 'mdi-eye'"
-            @click:append="passwordType = !passwordType"
-            @keydown="whenPressingEnter"
-          ></v-text-field>
-          <v-checkbox
-            class="mb-4"
-            label="记住我的登录信息"
-            v-model="rememberMe"
-          >
-          </v-checkbox>
+          <v-row no-gutters>
+            <v-col cols="12">
+              <v-text-field
+                v-model="username"
+                :rules="[(v) => !!v || 'Username cannot be empty!']"
+                label="Username*"
+                required
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12">
+              <v-text-field
+                :type="passwordType ? 'password' : 'text'"
+                v-model="password"
+                :rules="[(v) => !!v || 'Password cannot be empty!']"
+                label="Password*"
+                required
+                :append-icon="passwordType ? 'mdi-eye-off' : 'mdi-eye'"
+                @click:append="passwordType = !passwordType"
+                @keydown="whenPressingEnter"
+              ></v-text-field>
+            </v-col>
+          </v-row>
         </v-form>
-        <v-btn color="primary" @click="signIn" block> 登录 </v-btn>
+        <v-card-actions class="px-0 mb-3">
+          <v-checkbox
+            label="Remember Me"
+            dense
+            v-model="rememberMe"
+            hide-details
+            class="customized-checkbox"
+          />
+          <v-spacer />
+          <router-link to="/sign-up" style="color: white">Sign Up</router-link>
+        </v-card-actions>
+        <v-btn color="primary" @click="signIn" block> Sign In </v-btn>
       </v-card-text>
-
-      <v-card-actions class="px-4 pt-4 pb-6">
-        <div
-          class="d-flex align-center"
-          style="font-size: 15px; color: #959da4"
-        >
-          忘记密码?<a href="#" style="color: white" class="mx-1">点此找回</a>
-        </div>
-        <v-spacer />
-        <div
-          class="d-flex align-center"
-          style="font-size: 15px; color: #959da4"
-        >
-          其他方式<a href="#" style="color: white" class="mx-1">登录</a>
-        </div>
-      </v-card-actions>
     </v-card>
     <v-toolbar
       style="
@@ -105,7 +97,9 @@
       <v-spacer />
       <div class="text-right">
         By
-        <a href="https://github.com/taoqingqiu" style="color: #fff">Qingqiu</a>
+        <a href="https://github.com/boring-plans" style="color: #fff">
+          Newest boy
+        </a>
         <br />version {{ version }}
       </div>
     </v-toolbar>
@@ -137,17 +131,9 @@ export default {
         this.signingIn = true;
         const response = await getToken(this.username, this.password);
         if (response.code === 0) {
-          // if (process.env.NODE_ENV === "development") {
-          //   const { menus, actions } = (await getPermissions()).data;
-          //   sessionStorage.setItem(
-          //     "menus-actions",
-          //     JSON.stringify({ menus, actions })
-          //   );
-          // } else {
-          // }
           this.rememberMe
-            ? localStorage.setItem("va-access-token", response.token)
-            : sessionStorage.setItem("va-access-token", response.token);
+            ? localStorage.setItem("va-access-token", response.result)
+            : sessionStorage.setItem("va-access-token", response.result);
           await this.$router.push("/");
         } else {
           this.indications.error = response.message;

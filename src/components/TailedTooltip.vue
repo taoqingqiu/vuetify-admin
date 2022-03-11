@@ -11,22 +11,42 @@
       <div
         v-if="'top' in $attrs"
         class="tail"
-        style="left: calc(50% - 5px); bottom: -5px; border-bottom: 0; border-top-color: rgba(0, 0, 0, 0.9)"
+        style="
+          left: calc(50% - 5px);
+          bottom: -5px;
+          border-bottom: 0;
+          border-top-color: rgba(0, 0, 0, 0.9);
+        "
       ></div>
       <div
         v-if="'left' in $attrs"
         class="tail"
-        style="top: calc(50% - 5px); right: -5px; border-right: 0; border-left-color: rgba(0, 0, 0, 0.9)"
+        style="
+          top: calc(50% - 5px);
+          right: -5px;
+          border-right: 0;
+          border-left-color: rgba(0, 0, 0, 0.9);
+        "
       ></div>
       <div
         v-if="'bottom' in $attrs"
         class="tail"
-        style="left: calc(50% - 5px); top: -5px; border-top: 0; border-bottom-color: rgba(0, 0, 0, 0.9)"
+        style="
+          left: calc(50% - 5px);
+          top: -5px;
+          border-top: 0;
+          border-bottom-color: rgba(0, 0, 0, 0.9);
+        "
       ></div>
       <div
         v-if="'right' in $attrs"
         class="tail"
-        style="top: calc(50% - 5px); left: -5px; border-left: 0; border-right-color: rgba(0, 0, 0, 0.9)"
+        style="
+          top: calc(50% - 5px);
+          left: -5px;
+          border-left: 0;
+          border-right-color: rgba(0, 0, 0, 0.9);
+        "
       ></div>
     </template>
   </v-tooltip>

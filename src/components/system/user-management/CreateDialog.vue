@@ -1,7 +1,7 @@
 <template>
   <v-dialog :value="value" width="400px" persistent>
     <v-card :loading="loading">
-      <v-card-title> 新增用户 </v-card-title>
+      <v-card-title> New User </v-card-title>
       <v-card-text>
         <v-alert
           text
@@ -25,23 +25,23 @@
           <v-row>
             <v-col cols="12">
               <v-text-field
-                label="用户名*"
+                label="Username*"
                 required
                 v-model="formData['username']"
-                :rules="[(value) => !!value || '用户名不可为空']"
+                :rules="[(val) => !!val || 'Username cannot be empty!']"
               ></v-text-field>
             </v-col>
             <v-col cols="12">
               <v-text-field
-                label="密码*"
+                label="Password*"
                 required
                 v-model="formData['password']"
-                :rules="[(value) => !!value || '密码不可为空']"
+                :rules="[(val) => !!val || 'Password cannot be empty!']"
               ></v-text-field>
             </v-col>
             <v-col cols="12">
               <v-select
-                label="角色"
+                label="Role"
                 v-model="formData['roles']"
                 :items="roles"
                 multiple
@@ -53,10 +53,10 @@
         </v-form>
       </v-card-text>
       <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn @click="$emit('input', false)" text> 取消 </v-btn>
+        <v-spacer />
+        <v-btn @click="$emit('input', false)" text> Cancel </v-btn>
         <v-btn color="primary" @click="submit" :loading="submitting" text>
-          确认
+          Confirm
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -91,7 +91,7 @@ export default {
         this.warningAlert = false;
       } else {
         this.loading = true;
-        this.roles = (await getRoles()).data;
+        this.roles = (await getRoles()).result;
         this.loading = false;
       }
     },
@@ -103,9 +103,9 @@ export default {
         this.submitting = true;
 
         await createUser(this.formData);
-        this.$notify.success("已新建!");
+        this.$notify.success("Created!");
         setTimeout(() => {
-          this.$notify.info("重载列表..", true);
+          this.$notify.info("Reloading..", true);
           this.$emit("reload");
         }, 800);
 

@@ -27,7 +27,7 @@
           <v-list-item-icon v-if="!mini">
             <v-icon>{{ item.meta.icon }}</v-icon>
           </v-list-item-icon>
-          <tailed-tooltip v-else right>
+          <tailed-tooltip v-else right nudge-right="12">
             <template #activator="{ attrs, on }">
               <v-list-item-icon v-on="on" v-bind="attrs">
                 <v-icon>{{ item.meta.icon }}</v-icon>
@@ -57,7 +57,11 @@
                 .concat()
                 .sort((a, b) => a.order - b.order)"
             >
-              <v-list-item :key="idx" :to="i.path" v-if="!i.children">
+              <v-list-item
+                :key="idx"
+                :to="`${item.path}/${i.path}`"
+                v-if="!i.children"
+              >
                 <v-list-item-title>{{ i.name }}</v-list-item-title>
               </v-list-item>
               <v-list-group v-else :key="idx" no-action sub-group :value="true">
@@ -66,7 +70,7 @@
                 </template>
                 <v-list-item
                   :key="_idx"
-                  :to="_i.path"
+                  :to="`${item.path}/${i.path}/${_i.path}`"
                   v-for="(_i, _idx) in i.children
                     .concat()
                     .sort((a, b) => a.order - b.order)"
@@ -87,7 +91,11 @@
             <template #activator="{ attrs, on }">
               <v-list-item>
                 <v-list-item-icon v-bind="attrs" v-on="on">
-                  <tailed-tooltip right v-model="tooltip[index]">
+                  <tailed-tooltip
+                    right
+                    v-model="tooltip[index]"
+                    nudge-right="12"
+                  >
                     <template #activator="{ attrs: _attrs, on: _on }">
                       <v-icon
                         :color="
@@ -111,7 +119,7 @@
                 .sort((a, b) => a.order - b.order)"
               dense
             >
-              <v-list-item :to="i.path" v-if="!i.children">
+              <v-list-item :to="`${item.path}/${i.path}`" v-if="!i.children">
                 <v-list-item-title>{{ i.name }}</v-list-item-title>
               </v-list-item>
               <v-menu
@@ -139,7 +147,7 @@
                     .concat()
                     .sort((a, b) => a.order - b.order)"
                 >
-                  <v-list-item :to="_i.path">
+                  <v-list-item :to="`${item.path}/${i.path}/${_i.path}`">
                     <v-list-item-title>{{ _i.name }}</v-list-item-title>
                   </v-list-item>
                 </v-list>
@@ -150,16 +158,14 @@
       </template>
     </v-list>
 
-    <!-- lg、xl 时 nav drawer 固定在左侧，此时提供折叠功能 -->
-    <template #append class="d-none">
-      <div class="d-none d-lg-block d-xl-block">
-        <v-divider />
-        <v-btn block @click="mini = !mini" text>
-          <v-icon>{{
-            mini ? "mdi-chevron-double-right" : "mdi-chevron-double-left"
-          }}</v-icon>
-        </v-btn>
-      </div>
+    <!-- only show up when lg and up -->
+    <template #append class="d-none" v-if="$vuetify.breakpoint.lgAndUp">
+      <v-divider />
+      <v-btn block @click="mini = !mini" text>
+        <v-icon>{{
+          mini ? "mdi-chevron-double-right" : "mdi-chevron-double-left"
+        }}</v-icon>
+      </v-btn>
     </template>
   </v-navigation-drawer>
 </template>
@@ -175,6 +181,13 @@ export default {
     secondMenu: {},
     tooltip: {},
   }),
+  watch: {
+    "$vuetify.breakpoint.mdAndDown"(val) {
+      if (val) {
+        this.mini = false;
+      }
+    },
+  },
   computed: {
     clipped() {
       return this.$store.state.app.clipped;
@@ -191,22 +204,24 @@ export default {
      * Build a route tree consists of accessible routes.
      * NB. make sure none empty children attribute (children: []) exists
      * @param tree
+     * @param parentPath
      * @returns {*[]}
      */
-    buildAccessibleTree(tree) {
+    buildAccessibleTree(tree, parentPath = null) {
       const result = [];
       tree.forEach((t) => {
+        const currPath = parentPath ? `${parentPath}/${t.path}` : t.path;
         if (!t.children) {
-          !t.path.includes(":") &&
-            this.accessibleRoutes.includes(t.path) &&
+          !currPath.includes(":") &&
+            this.accessibleRoutes.includes(currPath) &&
             result.push(t);
         } else {
-          const childrenResult = this.buildAccessibleTree(t.children);
+          const childrenResult = this.buildAccessibleTree(t.children, currPath);
           if (childrenResult.length) {
             const nodeNew = JSON.parse(JSON.stringify(t));
             delete nodeNew["children"];
             nodeNew["children"] = childrenResult;
-            result.push(t);
+            result.push(nodeNew);
           }
         }
       });

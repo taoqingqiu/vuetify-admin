@@ -1,13 +1,13 @@
-import Mock from 'mockjs';
+import Mock from "mockjs";
 
 // setup
-Mock.setup({ timeout: '0-800' });
+Mock.setup({ timeout: "0-800" });
 
 // register modules
-const moduleFiles = require.context('./modules', true, /.*\.js$/);
-moduleFiles.keys().forEach(k => {
+const moduleFiles = require.context("./modules", true, /.*\.js$/);
+moduleFiles.keys().forEach((k) => {
   Object.entries(moduleFiles(k).default).forEach(([key, value]) => {
-    const [type, url] = key.split('|');
-    Mock.mock(new RegExp('^' + url + '\\b'), type, value); // \b 添加元字符串，可用于区分匹配单复数
+    const [type, url] = key.split("|");
+    Mock.mock(new RegExp("^" + url + "\\b"), type, value);
   });
 });

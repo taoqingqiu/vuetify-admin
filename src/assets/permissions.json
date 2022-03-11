@@ -1,0 +1,68 @@
+[
+  {
+    "module": "Dashboard",
+    "visit": [
+      {
+        "text": "Dashboard",
+        "value": "/dashboard:visit"
+      }
+    ]
+  },
+  {
+    "module": "System",
+    "visit": [
+      {
+        "text": "User Management",
+        "value": "/system/user-management:visit"
+      },
+      {
+        "text": "Role Management",
+        "value": "/system/role-management:visit"
+      }
+    ],
+    "action": [
+      {
+        "text": "Create User",
+        "value": "user:create"
+      },
+      {
+        "text": "Edit User",
+        "value": "user:update"
+      },
+      {
+        "text": "Retrieve User",
+        "value": "user:retrieve"
+      },
+      {
+        "text": "Delete User",
+        "value": "user:delete"
+      }
+    ]
+  },
+  {
+    "module": "3 levels demo",
+    "visit": [
+      {
+        "text": "Demo 1",
+        "value": "/three/levels/demo:visit"
+      },
+      {
+        "text": "Demo 2",
+        "value": "/three/levels-another/demo:visit"
+      }
+    ]
+  },
+  {
+    "module": "Dynamic Demo",
+    "visit": [
+      {
+        "text": "Parent Page",
+        "value": "/dynamic-route-demo:visit"
+      },
+      {
+        "text": "Child Page",
+        "value": "/dynamic-route-demo/:id:visit"
+      }
+    ]
+  }
+]

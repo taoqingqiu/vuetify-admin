@@ -3,7 +3,6 @@ import store from "@/store";
 import VueRouter from "vue-router";
 import { showLoading, hideLoading } from "@/utils/loading";
 import { getAccessToken } from "@/utils/storage-util";
-import { flattenTree } from "@/utils/tree-util";
 
 Vue.use(VueRouter);
 
@@ -12,13 +11,13 @@ Vue.use(VueRouter);
 const routesOutOfList = [
   {
     path: "/",
-    name: "正在加载",
-    component: () => import("@/views/Barren.vue"),
+    name: "Loading",
+    component: () => import("@/views/Loading.vue"),
     meta: { public: true },
   },
   {
     path: "/sign-in",
-    name: "登录",
+    name: "Sign In",
     component: () => import("../views/SignIn.vue"),
     meta: { public: true },
   },
@@ -27,7 +26,7 @@ const routesOutOfList = [
 export const routes = [
   {
     path: "/dashboard",
-    name: "综合看板",
+    name: "Dashboard",
     component: () => import("@/views/Dashboard.vue"),
     meta: {
       icon: "mdi-view-dashboard",
@@ -50,30 +49,51 @@ const router = new VueRouter({
 
 // -- router guard
 
-const matchDynamic = (current_route, dynamic_route_path) => {
-  return Object.entries(current_route.params).some(
+const matchDynamic = (currentRoute, dynamicRoutePath) => {
+  return Object.entries(currentRoute.params).some(
     ([key]) =>
-      dynamic_route_path ===
-      current_route.path.split("/").slice(0, -1).join("/") + "/:" + key
+      dynamicRoutePath ===
+      currentRoute.path.split("/").slice(0, -1).join("/") + "/:" + key
   );
 };
 
 /**
+ * [{path:'/xxx', ..., children: [{path: 'xx', ...}, {path: 'x', ...}]}]
+ * ->
+ * [{path:'/xxx/xx', ...}, {path:'/xxx/x', ...}]
+ * @param routeTree
+ * @param parentPath
+ * @returns {*[]}
+ */
+const flattenRouteTree = (routeTree, parentPath = null) => {
+  const resultArr = [];
+  routeTree.forEach((rt) => {
+    const currPath = parentPath ? `${parentPath}/${rt["path"]}` : rt["path"];
+    if (!rt.children) {
+      resultArr.push(currPath);
+    } else {
+      resultArr.push(...flattenRouteTree(rt.children, currPath));
+    }
+  });
+  return resultArr;
+};
+
+/**
  * Check whether route exists
+ *
  * @param route
  * @returns {boolean}
  */
 const checkExistence = (route) => {
-  const routesFlattened = flattenTree([...routes, ...routesOutOfList]);
+  const routesFlattened = flattenRouteTree([...routes, ...routesOutOfList]);
   return routesFlattened.some(
-    (rf) =>
-      route.path === rf.path ||
-      (rf.path.includes(":") && matchDynamic(route, rf.path))
+    (rf) => route.path === rf || (rf.includes(":") && matchDynamic(route, rf))
   );
 };
 
 /**
  * Check whether route is accessible
+ *
  * especially, '/' and some public routes are for sure accessible
  * @param route
  * @returns {boolean}
@@ -97,14 +117,22 @@ router.beforeEach(async (to, _, next) => {
   showLoading();
   document.title = (to.name ? to.name + " - " : "") + "Vuetify Admin";
 
+  // reset error
+  store.dispatch("error/reset");
+
+  // bring lost user info due to refreshing back to vuex
+  if (!store.state.auth.signedInUser) {
+    await store.dispatch("auth/setSignedInUser");
+  }
+
   const token = getAccessToken();
   if (token && to.path === "/sign-in") {
     next({ path: "/", replace: true });
   } else {
     if (!checkExistence(to)) {
-      store.commit("app/SET_ERROR", 404);
+      store.commit("error/SET_ERROR", 404);
     } else if (!checkAccessibility(to)) {
-      store.commit("app/SET_ERROR", 403);
+      store.commit("error/SET_ERROR", 403);
     }
     next();
   }

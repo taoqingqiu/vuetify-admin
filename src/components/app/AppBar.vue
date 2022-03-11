@@ -60,7 +60,7 @@
         </v-list-item>
         <v-divider />
         <v-list-item @click="signOut" class="red--text">
-          <v-list-item-title> 退出登录 </v-list-item-title>
+          <v-list-item-title> Sign Out </v-list-item-title>
         </v-list-item>
       </v-list>
     </v-menu>
@@ -107,7 +107,7 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped>
 .blurred {
   background: rgba(255, 255, 255, 0.618) !important;
   backdrop-filter: saturate(180%) blur(20px) !important;

@@ -1,71 +1,32 @@
-import axios, { formDataAxios } from "../utils/axios";
+import axios from "../utils/axios";
 
 /**
- * 获取用户列表
+ * Get user list
  * @returns
  */
 export const getUsers = () => axios.get("/user-management/users");
 
 /**
- * 上传头像
- * @param {*} avatar
+ * Create one user
+ * @param {*} formData
  * @returns
  */
-export const uploadAvatar = (avatar) =>
-  formDataAxios.post(
-    "/user-management/avatar",
-    (() => {
-      const avatarFormData = new FormData();
-      avatarFormData.append("avatar", avatar);
-      return avatarFormData;
-    })()
-  );
+export const createUser = (formData) =>
+  axios.post("/user-management/user", formData);
 
 /**
- * 新增用户
- * @param {*} createData
+ * Update one certain user
+ * @param id
+ * @param {*} formData
  * @returns
  */
-export const createUser = (createData) =>
-  axios.post("/user-management/user", createData);
+export const updateUser = (id, formData) =>
+  axios.put(`/user-management/user/${id}`, formData);
 
 /**
- * 编辑用户
- * @param {*} updateData
- * @returns
- */
-export const updateUser = (id, updateData) =>
-  axios.put(`/user-management/user/${id}`, updateData);
-
-/**
- * 激活用户
- * @param {*} id
- * @returns
- */
-export const activateUser = (id) =>
-  axios.patch(`/user-management/user/${id}`, { status: 1 });
-
-/**
- * 冻结用户
- * @param {*} id
- * @returns
- */
-export const freezeUser = (id) =>
-  axios.patch(`/user-management/user/${id}`, { status: 2 });
-
-/**
- * 删除用户们
- * @param {*} id
+ * Delete in batch
+ * @param {*} ids
  * @returns
  */
 export const deleteUsers = (ids) =>
-  axios.delete("/user-management/users", { params: { ids } });
-
-/**
- * 重置密码
- * @param {*} id
- * @param {*} password
- * @returns
- */
-export const resetPassword = (id, password) =>
-  axios.patch(`/user-management/user/${id}`, { password });
+  axios.delete("/user-management/users", { data: { ids } });

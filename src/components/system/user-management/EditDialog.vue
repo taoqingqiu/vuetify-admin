@@ -1,7 +1,7 @@
 <template>
   <v-dialog :value="value" width="400px" persistent>
     <v-card :loading="loading">
-      <v-card-title> 编辑用户 </v-card-title>
+      <v-card-title> Edit User </v-card-title>
       <v-card-text>
         <v-alert
           text
@@ -25,15 +25,15 @@
           <v-row>
             <v-col cols="12">
               <v-text-field
-                label="用户名*"
+                label="Username*"
                 required
                 v-model="formData['username']"
-                :rules="[(value) => !!value || '用户名不可为空']"
+                :rules="[(val) => !!val || 'Username cannot be empty!']"
               ></v-text-field>
             </v-col>
             <v-col cols="12">
               <v-select
-                label="角色"
+                label="Role"
                 v-model="formData['roles']"
                 :items="roles"
                 multiple
@@ -41,16 +41,17 @@
                 item-value="id"
               />
             </v-col>
-            <v-col cols="5">
-              <v-switch label="重置密码" v-model="resetPassword"></v-switch>
-            </v-col>
-            <v-col cols="7">
+            <v-col cols="12">
+              <v-switch
+                label="Reset Password"
+                v-model="resetPassword"
+              ></v-switch>
               <v-text-field
                 v-if="resetPassword"
-                label="新密码*"
+                label="New Password*"
                 required
                 v-model="formData['password']"
-                :rules="[(value) => !!value || '密码不可为空']"
+                :rules="[(val) => !!val || 'Password cannot be empty!']"
               ></v-text-field>
             </v-col>
             <v-col cols="12">
@@ -58,7 +59,7 @@
                 :true-value="1"
                 :false-value="0"
                 v-model="formData['state']"
-                :label="`状态: ${formData['state'] ? '正常' : '冻结'}`"
+                :label="`State: ${formData['state'] ? 'normal' : 'frozen'}`"
               />
             </v-col>
           </v-row>
@@ -66,9 +67,9 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn @click="$emit('input', false)" text> 取消 </v-btn>
+        <v-btn @click="$emit('input', false)" text> Cancel </v-btn>
         <v-btn color="primary" @click="submit" :loading="submitting" text>
-          确认
+          Confirm
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -76,7 +77,7 @@
 </template>
 <script>
 import { getRoles } from "@/api/role";
-import { createUser } from "@/api/user";
+import { updateUser } from "@/api/user";
 
 export default {
   props: ["value", "item"],
@@ -107,7 +108,7 @@ export default {
         this.warningAlert = false;
       } else {
         this.loading = true;
-        this.roles = (await getRoles()).data;
+        this.roles = (await getRoles()).result;
         this.formData = JSON.parse(JSON.stringify(this.item));
         this.loading = false;
       }
@@ -120,13 +121,14 @@ export default {
         "password" in this.formData &&
           !this.formData["password"] &&
           delete this.formData["password"];
+
         if (JSON.stringify(this.item) !== JSON.stringify(this.formData)) {
           this.submitting = true;
 
-          await createUser(this.formData);
-          this.$notify.success("已更新!");
+          await updateUser(this.formData);
+          this.$notify.success("Update saved!");
           setTimeout(() => {
-            this.$notify.info("重载列表..", true);
+            this.$notify.info("Reload..", true);
             this.$emit("reload");
           }, 800);
 

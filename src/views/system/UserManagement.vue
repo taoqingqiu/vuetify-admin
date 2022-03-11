@@ -1,51 +1,44 @@
 <template>
-  <v-container
-    fluid
-    fill-height
-    :class="['d-flex', { white: !$vuetify.theme.dark }]"
-  >
+  <v-container fluid fill-height class="flex-column" :class="['d-flex']">
+    <v-card flat class="d-flex align-center mb-2 px-4 py-2" width="100%">
+      <v-btn color="primary" small @click="createDialog = true"> New </v-btn>
+      <v-btn
+        color="error"
+        small
+        class="ml-1 ml-md-2"
+        @click="deleteManyDialog = true"
+        :disabled="selectedItems.length === 0"
+      >
+        Delete
+        <span v-if="selectedItems.length > 0">
+          ({{ selectedItems.length }})
+        </span>
+      </v-btn>
+      <v-spacer />
+      <div style="width: 240px" class="ml-4 mmd-0">
+        <v-text-field
+          hide-details
+          single-line
+          placeholder="Filter by keyword"
+          dense
+          v-model="search"
+          clearable
+          append-icon="mdi-magnify"
+        />
+      </div>
+    </v-card>
     <v-data-table
+      fixed-header
       :headers="headers"
       :items="items"
       :search="search"
       :loading="loading"
       :height="tableHeight"
-      class="align-self-stretch flex-grow-1"
+      class="align-self-stretch flex-grow-1 border-radius-table"
       checkbox-color="primary"
       v-model="selectedItems"
       show-select
     >
-      <!-- top toolbar -->
-      <template #top>
-        <v-toolbar flat dense>
-          <v-btn color="primary" @click="createDialog = true"> 新增 </v-btn>
-          <v-btn
-            color="error"
-            class="ml-1 ml-md-2"
-            @click="deleteManyDialog = true"
-            :disabled="selectedItems.length === 0"
-          >
-            删除
-            <span v-if="selectedItems.length > 0"
-              >({{ selectedItems.length }})
-            </span>
-          </v-btn>
-          <v-spacer />
-          <div style="width: 240px" class="ml-4 mmd-0">
-            <v-text-field
-              hide-details
-              outlined
-              single-line
-              placeholder="输入关键词以筛选"
-              dense
-              v-model="search"
-              clearable
-              append-icon="mdi-magnify"
-            />
-          </div>
-        </v-toolbar>
-      </template>
-
       <!-- roles -->
       <template #[`item.roles`]="{ item: { roles } }">
         <v-chip
@@ -78,7 +71,7 @@
         </tailed-tooltip>
       </template>
 
-      <!-- status -->
+      <!-- state -->
       <template #[`item.state`]="{ item: { state } }">
         <v-badge
           inline
@@ -87,7 +80,7 @@
           dot
           class="text-caption pr-4"
         >
-          {{ state === 1 ? "正常" : "冻结" }}
+          {{ state === 1 ? "Normal" : "Frozen" }}
         </v-badge>
       </template>
 
@@ -103,7 +96,7 @@
           "
           small
         >
-          编辑
+          Edit
         </v-btn>
         <v-btn
           text
@@ -114,7 +107,7 @@
           "
           small
         >
-          删除
+          Delete
         </v-btn>
       </template>
     </v-data-table>
@@ -148,14 +141,14 @@ export default {
     DeleteDialog,
     DeleteManyDialog,
   },
-  name: "management-user",
+  name: "UserManagement",
   data() {
     return {
       headers: [
-        { text: "用户名", value: "username" },
-        { text: "角色", value: "roles", sortable: false },
-        { text: "状态", value: "state", align: "center" },
-        { text: "操作", value: "actions", align: "center", sortable: false },
+        { text: "Username", value: "username" },
+        { text: "Roles", value: "roles", sortable: false },
+        { text: "State", value: "state", align: "center" },
+        { text: "Actions", value: "actions", align: "center", sortable: false },
       ],
       items: [],
       search: "",
@@ -175,11 +168,8 @@ export default {
       // dialogs
       createDialog: false,
       editDialog: false,
-      freezeDialog: false,
-      resetDialog: false,
       deleteDialog: false,
       deleteManyDialog: false,
-      activateDialog: false,
       // search
       searchData: {},
     };
@@ -189,20 +179,21 @@ export default {
   },
   computed: {
     tableHeight() {
-      return window.screen.height - 340;
+      return window.screen.height - 350;
     },
   },
   methods: {
     async getUsers() {
-      // 恢复一些状态
+      // reset
       this.selectedItems = [];
       this.deletingUser = -1;
       this.editingUser = {};
       this.freezingUser = {};
 
       this.loading = true;
-      this.items = (await getUsers()).data;
+      this.items = (await getUsers()).result;
       this.loading = false;
+      await this.$store.dispatch("app/dismissNotification");
     },
   },
 };
