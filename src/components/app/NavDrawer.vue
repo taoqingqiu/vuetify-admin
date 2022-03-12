@@ -8,18 +8,18 @@
     :color="!clipped ? ($vuetify.theme.dark ? '#1e1e1e' : '#17263d') : 'auto'"
   >
     <template #prepend v-if="!clipped">
-      <v-list-item>
-        <v-list-item-icon>
+      <v-list-item dense class="d-flex align-center py-1">
+        <v-list-item-icon class="align-self-center">
           <v-img
             max-width="24"
             src="https://cdn.vuetifyjs.com/docs/images/logos/vuetify-logo-light.svg"
           ></v-img>
         </v-list-item-icon>
-        <v-list-item-content class="text-h6">
+        <v-list-item-content class="text-h6 text-truncate py-0">
           Vuetify Admin
         </v-list-item-content>
       </v-list-item>
-      <v-divider class="my-1" />
+      <v-divider />
     </template>
     <v-list nav dense expand>
       <template v-for="(item, index) in accessibleTree">

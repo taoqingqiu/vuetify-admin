@@ -1,7 +1,7 @@
 <template>
-  <v-dialog :value="value" width="600px" persistent>
+  <v-dialog :value="value" width="400px" persistent>
     <v-card>
-      <v-card-title class="text-h5"> 编辑角色 </v-card-title>
+      <v-card-title> Edit Role </v-card-title>
       <v-card-text>
         <v-alert
           text
@@ -26,52 +26,45 @@
           <v-row>
             <v-col cols="12">
               <v-text-field
-                label="名称*"
+                label="Name*"
                 required
-                v-model="editData['name']"
-                :rules="[(value) => !!value || '名称不可为空']"
+                v-model="formData['name']"
+                :rules="[(val) => !!val || 'Name cannot be empty!']"
               ></v-text-field>
             </v-col>
             <v-col cols="12">
               <v-text-field
-                label="标识*"
-                required
-                v-model="editData['symbol']"
-                :rules="[(value) => !!value || '标识不可为空']"
+                label="Description*"
+                v-model="formData['description']"
               ></v-text-field>
-            </v-col>
-            <v-col cols="12">
-              <v-textarea
-                outlined
-                label="描述"
-                v-model="editData['description']"
-              ></v-textarea>
             </v-col>
           </v-row>
         </v-form>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn @click="$emit('input', false)"> 取消 </v-btn>
-        <v-btn color="primary" @click="edit" :loading="editing"> 确认 </v-btn>
+        <v-btn @click="$emit('input', false)" text> Cancel </v-btn>
+        <v-btn color="primary" @click="submit" :loading="submitting" text>
+          Confirm
+        </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 <script>
-import { updateRole } from "../../../api/role";
+import { updateRole } from "@/api/role";
 export default {
-  props: ["value", "role"],
+  props: ["value", "item"],
   data() {
     return {
       indications: {
         warning: "",
-        error: ""
+        error: "",
       },
       warningAlert: false,
       errorAlert: false,
-      editData: {},
-      editing: false
+      formData: {},
+      submitting: false,
     };
   },
   watch: {
@@ -79,37 +72,36 @@ export default {
       if (!val) {
         this.warningAlert = false;
         this.errorAlert = false;
-        this.editData = {};
+        this.formData = {};
         this.$refs.form.resetValidation();
       } else {
-        this.editData = JSON.parse(JSON.stringify(this.role));
+        this.formData = JSON.parse(JSON.stringify(this.item));
       }
-    }
+    },
   },
   computed: {
     modified() {
-      return JSON.stringify(this.editData) !== JSON.stringify(this.role);
-    }
+      return JSON.stringify(this.formData) !== JSON.stringify(this.item);
+    },
   },
   methods: {
-    async edit() {
+    async submit() {
       const valid = this.$refs.form.validate();
       if (valid) {
         if (this.modified) {
-          this.editing = true;
+          this.submitting = true;
+          await updateRole(this.item.id, this.formData);
+          this.submitting = false;
 
-          await updateRole(this.role.id, this.editData);
-
-          this.editing = false;
-          this.$notify.success("角色已更新！");
+          this.$notify.success("Update saved!");
           setTimeout(() => {
-            this.$notify.info("重新加载角色列表..", true);
+            this.$notify.info("Reloading..", true);
             this.$emit("reload");
           }, 800);
         }
       }
       this.$emit("input", false);
-    }
-  }
+    },
+  },
 };
 </script>

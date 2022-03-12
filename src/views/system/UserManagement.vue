@@ -159,12 +159,6 @@ export default {
       currPage: 1,
       pageSize: 10,
       itemsLength: 1,
-      // in progress user
-      editingUser: {},
-      freezingUser: {},
-      resetingUser: {},
-      deletingUser: -1,
-      activatingUser: {},
       // dialogs
       createDialog: false,
       editDialog: false,
@@ -184,12 +178,8 @@ export default {
   },
   methods: {
     async getUsers() {
-      // reset
       this.selectedItems = [];
-      this.deletingUser = -1;
-      this.editingUser = {};
-      this.freezingUser = {};
-
+      this.selectedItem = null;
       this.loading = true;
       this.items = (await getUsers()).result;
       this.loading = false;

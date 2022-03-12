@@ -118,7 +118,7 @@ router.beforeEach(async (to, _, next) => {
   document.title = (to.name ? to.name + " - " : "") + "Vuetify Admin";
 
   // reset error
-  store.dispatch("error/reset");
+  await store.dispatch("error/reset");
 
   // bring lost user info due to refreshing back to vuex
   if (!store.state.auth.signedInUser) {

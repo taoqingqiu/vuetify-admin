@@ -3,6 +3,7 @@
     :color="clipped ? ($vuetify.theme.dark ? '#1e1e1e' : '#17263d') : 'auto'"
     app
     flat
+    dense
     :clipped-left="clipped"
     :class="{ blurred: !clipped && !$vuetify.theme.dark }"
     :dark="clipped"
@@ -21,8 +22,13 @@
 
     <v-spacer />
 
-    <v-btn icon @click="$vuetify.theme.dark = !$vuetify.theme.dark">
-      <v-icon>
+    <v-btn
+      icon
+      @click="$vuetify.theme.dark = !$vuetify.theme.dark"
+      small
+      class="mr-1"
+    >
+      <v-icon small>
         {{
           $vuetify.theme.dark
             ? "mdi-white-balance-sunny"
@@ -30,19 +36,23 @@
         }}
       </v-icon>
     </v-btn>
-    <v-btn icon @click="$store.commit('app/SET_CLIPPED', !clipped)">
-      <v-icon>
+    <v-btn
+      icon
+      small
+      @click="$store.commit('app/SET_CLIPPED', !clipped)"
+      class="mr-1"
+    >
+      <v-icon small>
         {{
           !clipped ? "$vuetify.icons.layout-clipped" : "$vuetify.icons.layout"
         }}
       </v-icon>
     </v-btn>
-
     <!-- avatar -->
     <v-menu offset-y>
       <template v-slot:activator="{ on, attrs }">
-        <v-btn icon v-on="on" v-bind="attrs" class="mr-1" light>
-          <v-avatar size="32px" color="rgb(207, 224, 214)">
+        <v-btn icon v-on="on" v-bind="attrs" class="mr-1" light small>
+          <v-avatar size="24px" color="rgb(207, 224, 214)">
             {{ signedInUser[0] || "" }}
           </v-avatar>
         </v-btn>

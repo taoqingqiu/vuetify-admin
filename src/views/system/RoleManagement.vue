@@ -65,13 +65,29 @@
                       {{ role.name }}
                     </v-list-item-title>
                     <v-list-item-subtitle>
-                      {{ role.description || "暂无描述~" }}
+                      {{ role.description || "No description" }}
                     </v-list-item-subtitle>
                   </v-list-item-content>
-                  <v-btn icon x-small color="primary">
+                  <v-btn
+                    icon
+                    x-small
+                    color="primary"
+                    @click.stop="
+                      selectedRole = role;
+                      editDialog = true;
+                    "
+                  >
                     <v-icon x-small>mdi-pencil</v-icon>
                   </v-btn>
-                  <v-btn icon x-small color="error">
+                  <v-btn
+                    icon
+                    x-small
+                    color="error"
+                    @click.stop="
+                      selectedRole = role;
+                      deleteDialog = true;
+                    "
+                  >
                     <v-icon x-small>mdi-trash-can</v-icon>
                   </v-btn>
                 </v-list-item>
@@ -176,34 +192,37 @@
       </v-card>
     </v-col>
     <create-dialog v-model="createDialog" @reload="getRoles" />
+    <delete-many-dialog
+      v-model="deleteManyDialog"
+      :items="selectedRoles"
+      @reload="getRoles"
+    />
     <delete-dialog
       v-model="deleteDialog"
-      :roles="selectedRoles"
+      :item="selectedRole"
       @reload="getRoles"
     />
-    <edit-dialog
-      v-model="editDialog"
-      :role="roles[activeRole]"
-      @reload="getRoles"
-    />
+    <edit-dialog v-model="editDialog" :item="selectedRole" @reload="getRoles" />
   </v-container>
 </template>
 <script>
 import { getPermissions, getRoles, updatePermissions } from "@/api/role";
 import DeleteDialog from "@/components/system/role-management/DeleteDialog.vue";
+import DeleteManyDialog from "@/components/system/role-management/DeleteDialog.vue";
 import CreateDialog from "@/components/system/role-management/CreateDialog.vue";
 import EditDialog from "@/components/system/role-management/EditDialog.vue";
 import permissions from "@/assets/permissions.json";
 
 export default {
   name: "RoleManagement",
-  components: { CreateDialog, DeleteDialog, EditDialog },
+  components: { CreateDialog, DeleteDialog, EditDialog, DeleteManyDialog },
   data() {
     return {
       // roles
       activeRole: null,
       roles: [],
       selectedRoles: [],
+      selectedRole: null,
       loadingRoles: false,
       loadingPermissions: false,
       // permissions
@@ -219,6 +238,7 @@ export default {
       // dialogs
       createDialog: false,
       deleteDialog: false,
+      deleteManyDialog: false,
       editDialog: false,
       // search
       rolesQuantity: [],
@@ -277,6 +297,7 @@ export default {
 
       this.$notify.success("Update saved!");
       this.selectedPermissionsOrigin = [...this.selectedPermissions];
+      await this.$store.dispatch("auth/setSignedInUser");
     },
     async getBoundPermissions() {
       this.loadingPermissions = true;
@@ -285,6 +306,7 @@ export default {
       this.loadingPermissions = false;
     },
     async getRoles() {
+      this.selectedRoles = [];
       this.loadingRoles = true;
       this.roles = (await getRoles()).result;
       this.rolesQuantity = JSON.parse(JSON.stringify(this.roles));
