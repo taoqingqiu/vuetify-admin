@@ -114,13 +114,7 @@
     >
       <v-card
         v-if="!activeRole"
-        class="
-          align-self-stretch
-          flex-grow-1
-          d-flex
-          align-center
-          justify-center
-        "
+        class="align-self-stretch flex-grow-1 d-flex align-center justify-center"
         flat
       >
         Click certain role to edit permissions.
@@ -131,7 +125,7 @@
         :headers="headers"
         :items="permissions"
         :height="tableHeight"
-        :loading="loadingPermissions"
+        :loading="updating"
         hide-default-footer
         disable-pagination
         fixed-header
@@ -206,7 +200,7 @@
   </v-container>
 </template>
 <script>
-import { getPermissions, getRoles, updatePermissions } from "@/api/role";
+import { getRoles, updateRole } from "@/api/role";
 import DeleteDialog from "@/components/system/role-management/DeleteDialog.vue";
 import DeleteManyDialog from "@/components/system/role-management/DeleteDialog.vue";
 import CreateDialog from "@/components/system/role-management/CreateDialog.vue";
@@ -224,7 +218,6 @@ export default {
       selectedRoles: [],
       selectedRole: null,
       loadingRoles: false,
-      loadingPermissions: false,
       // permissions
       headers: [
         { text: "Module", value: "module" },
@@ -292,7 +285,12 @@ export default {
     },
     async updateBoundPermissions() {
       this.updating = true;
-      await updatePermissions(this.activeRole, this.selectedPermissions);
+      const permissions = this.selectedPermissions.join(",");
+      await updateRole(this.activeRole, {
+        permissions,
+      });
+      const theRole = this.roles.find((r) => r.id === this.activeRole);
+      theRole.permissions = permissions;
       this.updating = false;
 
       this.$notify.success("Update saved!");
@@ -300,13 +298,11 @@ export default {
       await this.$store.dispatch("auth/setSignedInUser");
     },
     async getBoundPermissions() {
-      this.loadingPermissions = true;
-      this.selectedPermissions = (await getPermissions(this.activeRole)).result;
+      const theRole = this.roles.find((r) => r.id === this.activeRole);
+      this.selectedPermissions = theRole.permissions.split(",");
       this.selectedPermissionsOrigin = [...this.selectedPermissions];
-      this.loadingPermissions = false;
     },
     async getRoles() {
-      this.selectedRoles = [];
       this.loadingRoles = true;
       this.roles = (await getRoles()).result;
       this.rolesQuantity = JSON.parse(JSON.stringify(this.roles));

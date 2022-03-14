@@ -21,6 +21,12 @@ const routesOutOfList = [
     component: () => import("../views/SignIn.vue"),
     meta: { public: true },
   },
+  {
+    path: "/sign-up",
+    name: "Sign Up",
+    component: () => import("../views/SignUp.vue"),
+    meta: { public: true },
+  },
 ];
 
 export const routes = [

@@ -21,4 +21,5 @@ export default {
   "get|/api/auth/token": createResponse("access-token"),
   "get|/api/auth/user-info": createResponse(mockUserInfo),
   "get|/api/auth/permissions": createResponse(mockPermissions),
+  "post|/api/auth/user": createResponse("access-token"),
 };

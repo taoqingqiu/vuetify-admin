@@ -30,20 +30,3 @@ export const updateRole = (id, formData) =>
  */
 export const deleteRoles = (ids) =>
   axios.delete("/role-management/roles", { data: { ids } });
-
-/**
- * Get bound permissions of certain role
- * @param id
- * @returns {*}
- */
-export const getPermissions = (id) =>
-  axios.get(`/role-management/role/${id}/permissions`);
-
-/**
- * Update bound permissions of certain role
- * @param {*} id
- * @param {*} permissions
- * @returns {*}
- */
-export const updatePermissions = (id, permissions) =>
-  axios.patch(`/role-management/role/${id}/permissions`, { permissions });

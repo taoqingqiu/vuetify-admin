@@ -29,7 +29,7 @@ import AppBar from "./components/app/AppBar.vue";
 import NavDrawer from "./components/app/NavDrawer.vue";
 import Notification from "./components/app/Notification.vue";
 
-const conciseRouteList = ["/sign-in", "/"];
+const conciseRouteList = ["/sign-in", "/sign-up", "/"];
 
 export default {
   name: "App",

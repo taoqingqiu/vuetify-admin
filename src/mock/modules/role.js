@@ -9,6 +9,7 @@ export default {
           "id|+1": 1,
           name: "@string(8, 10)",
           description: "@string(5, 20)",
+          permissions: "user:retrieve,user:create,/dashboard:visit",
         },
       ],
     })["data"]
@@ -16,19 +17,4 @@ export default {
   "post|/api/role-management/role": createResponse(),
   "put|/api/role-management/role/\\d+": createResponse(),
   "delete|/api/role-management/roles": createResponse(),
-  "get|/api/role-management/role/\\d+/permissions": createResponse([
-    "/dashboard:visit",
-    "/three/levels/demo:visit",
-    "/system/user-management:visit",
-    "/system/role-management:visit",
-    "user:retrieve",
-    "user:create",
-    "user:update",
-    "user:delete",
-    "role:retrieve",
-    "role:create",
-    "role:update",
-    "role:delete",
-  ]),
-  "patch|/api/role-management/role/\\d+/permissions": createResponse(),
 };

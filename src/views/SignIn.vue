@@ -7,7 +7,7 @@
   >
     <v-card
       :loading="signingIn"
-      class="col-lg-3 col-sm-5 pt-0"
+      class="col-lg-3 col-sm-5 col-xl-4 pt-0"
       style="
         margin-bottom: 48px;
         background-color: #17263d;
@@ -74,10 +74,16 @@
             class="customized-checkbox"
           />
           <v-spacer />
-          <router-link to="/sign-up" style="color: white">Sign Up</router-link>
         </v-card-actions>
-        <v-btn color="primary" @click="signIn" block> Sign In </v-btn>
+        <v-btn color="primary" @click="signIn" block :disabled="signingIn">
+          Sign In
+        </v-btn>
       </v-card-text>
+      <v-card-actions class="text-caption py-0">
+        <v-card-actions>Don't have an account yet?</v-card-actions>
+        <router-link to="/sign-up" style="color: white">Sign Up</router-link>
+        <v-spacer />
+      </v-card-actions>
     </v-card>
     <v-toolbar
       style="

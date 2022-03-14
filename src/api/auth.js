@@ -23,3 +23,12 @@ export const getPermissions = () => axios.get("/auth/permissions");
  * @returns
  */
 export const getUserInfo = () => axios.get("/auth/user-info");
+
+/**
+ * Sign up
+ * @param username
+ * @param password
+ * @returns {Promise<AxiosResponse<any>>}
+ */
+export const signUp = (username, password) =>
+  axios.post("/auth/user", { username, password });
