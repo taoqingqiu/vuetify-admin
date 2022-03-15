@@ -1,13 +1,21 @@
 <template>
   <v-container fluid fill-height class="flex-column" :class="['d-flex']">
     <v-card flat class="d-flex align-center mb-2 px-4 py-2" width="100%">
-      <v-btn color="primary" small @click="createDialog = true"> New </v-btn>
+      <v-btn
+        color="primary"
+        class="mr-1 mr-md-2"
+        small
+        @click="createDialog = true"
+        v-if="$permission('user:create')"
+      >
+        New
+      </v-btn>
       <v-btn
         color="error"
         small
-        class="ml-1 ml-md-2"
         @click="deleteManyDialog = true"
         :disabled="selectedItems.length === 0"
+        v-if="$permission('user:delete')"
       >
         Delete
         <span v-if="selectedItems.length > 0">
@@ -28,6 +36,7 @@
       </div>
     </v-card>
     <v-data-table
+      v-if="retrieveUsersAuthority"
       fixed-header
       :headers="headers"
       :items="items"
@@ -95,6 +104,7 @@
             editDialog = true;
           "
           small
+          v-if="$permission('user:update')"
         >
           Edit
         </v-btn>
@@ -106,11 +116,19 @@
             deleteDialog = true;
           "
           small
+          v-if="$permission('user:delete')"
         >
           Delete
         </v-btn>
       </template>
     </v-data-table>
+    <v-card
+      v-else
+      flat
+      class="align-self-stretch flex-grow-1 d-flex align-center justify-center"
+    >
+      Don't have the authority to retrieve users.
+    </v-card>
     <create-dialog v-model="createDialog" @reload="getUsers" />
     <edit-dialog v-model="editDialog" @reload="getUsers" :item="selectedItem" />
     <delete-dialog
@@ -170,20 +188,28 @@ export default {
   },
   created() {
     this.getUsers();
+    !this.$permission("user:delete") &&
+      !this.$permission("user:update") &&
+      this.headers.pop();
   },
   computed: {
     tableHeight() {
       return window.screen.height - 350;
     },
+    retrieveUsersAuthority() {
+      return this.$permission("user:retrieve");
+    },
   },
   methods: {
     async getUsers() {
-      this.selectedItems = [];
-      this.selectedItem = null;
-      this.loading = true;
-      this.items = (await getUsers()).result;
-      this.loading = false;
-      await this.$store.dispatch("app/dismissNotification");
+      if (this.retrieveUsersAuthority) {
+        this.selectedItems = [];
+        this.selectedItem = null;
+        this.loading = true;
+        this.items = (await getUsers()).result;
+        this.loading = false;
+        this.$notify.dismiss();
+      }
     },
   },
 };

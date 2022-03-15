@@ -90,12 +90,13 @@ export default {
       if (valid) {
         if (this.modified) {
           this.submitting = true;
+          delete this.formData["id"];
           await updateRole(this.item.id, this.formData);
           this.submitting = false;
 
           this.$notify.success("Update saved!");
           setTimeout(() => {
-            this.$notify.info("Reloading..", true);
+            this.$notify.loading("Reloading..");
             this.$emit("reload");
           }, 800);
         }

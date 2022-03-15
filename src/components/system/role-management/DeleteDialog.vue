@@ -35,7 +35,7 @@ export default {
 
       this.$notify.success(`Deleted!`);
       setTimeout(() => {
-        this.$notify.info("Reload..", true);
+        this.$notify.loading("Reload..");
         this.$emit("reload");
       }, 800);
     },

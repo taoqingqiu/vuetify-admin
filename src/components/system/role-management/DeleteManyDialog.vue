@@ -4,7 +4,7 @@
       <v-card-title> Delete Confirm </v-card-title>
       <v-card-text class="my-4">
         <v-icon color="warning" class="mr-1" small>mdi-alert-circle</v-icon>
-        Sure to delete these {{ items.length }} users？
+        Sure to delete these {{ items.length }} roles？
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
@@ -34,7 +34,7 @@ export default {
       this.$emit("input", false);
       this.$notify.success("Deleted!");
       setTimeout(() => {
-        this.$notify.info("Reloading..", true);
+        this.$notify.loading("Reloading..");
         this.$emit("reload");
       }, 800);
     },

@@ -8,7 +8,12 @@
     >
       <v-card style="width: 100%" flat>
         <v-card-title>
-          <v-btn color="primary" small @click="createDialog = true">
+          <v-btn
+            color="primary"
+            small
+            @click="createDialog = true"
+            v-if="$permission('role:create')"
+          >
             New
           </v-btn>
           <v-btn
@@ -16,7 +21,8 @@
             class="ml-1 ml-md-2"
             small
             :disabled="selectedRoles.length === 0"
-            @click="deleteDialog = true"
+            @click="deleteManyDialog = true"
+            v-if="$permission('role:delete')"
           >
             Delete
             <span v-if="selectedRoles.length > 0"
@@ -38,9 +44,18 @@
             ></v-text-field>
           </v-toolbar>
         </v-card-title>
+        <v-card
+          flat
+          v-if="!retrieveRolesAuthority"
+          :style="{ height: listHeight + 'px' }"
+          class="d-flex align-center justify-center"
+        >
+          Don't have the authority to retrieve roles.
+        </v-card>
         <v-card-text
           class="pa-0 overflow-auto"
           :style="{ maxHeight: listHeight + 'px' }"
+          v-else
         >
           <v-list dense nav>
             <v-list-item-group v-model="activeRole">
@@ -64,7 +79,7 @@
                     <v-list-item-title :title="role.name">
                       {{ role.name }}
                     </v-list-item-title>
-                    <v-list-item-subtitle>
+                    <v-list-item-subtitle :title="role.description">
                       {{ role.description || "No description" }}
                     </v-list-item-subtitle>
                   </v-list-item-content>
@@ -76,6 +91,7 @@
                       selectedRole = role;
                       editDialog = true;
                     "
+                    v-if="$permission('role:update')"
                   >
                     <v-icon x-small>mdi-pencil</v-icon>
                   </v-btn>
@@ -87,6 +103,7 @@
                       selectedRole = role;
                       deleteDialog = true;
                     "
+                    v-if="$permission('role:delete')"
                   >
                     <v-icon x-small>mdi-trash-can</v-icon>
                   </v-btn>
@@ -117,7 +134,11 @@
         class="align-self-stretch flex-grow-1 d-flex align-center justify-center"
         flat
       >
-        Click certain role to edit permissions.
+        {{
+          $permission("role:update")
+            ? "Click certain role to edit permissions."
+            : "Don't have the authority to edit roles."
+        }}
       </v-card>
       <v-data-table
         v-else
@@ -156,7 +177,12 @@
         </template>
       </v-data-table>
 
-      <v-card flat class="d-flex align-center mt-2 px-4 py-2" width="100%">
+      <v-card
+        flat
+        class="d-flex align-center mt-2 px-4 py-2"
+        width="100%"
+        v-if="$permission('role:update')"
+      >
         <v-btn
           small
           color="primary"
@@ -202,7 +228,7 @@
 <script>
 import { getRoles, updateRole } from "@/api/role";
 import DeleteDialog from "@/components/system/role-management/DeleteDialog.vue";
-import DeleteManyDialog from "@/components/system/role-management/DeleteDialog.vue";
+import DeleteManyDialog from "@/components/system/role-management/DeleteManyDialog.vue";
 import CreateDialog from "@/components/system/role-management/CreateDialog.vue";
 import EditDialog from "@/components/system/role-management/EditDialog.vue";
 import permissions from "@/assets/permissions.json";
@@ -238,7 +264,7 @@ export default {
       keyword: "",
     };
   },
-  mounted() {
+  created() {
     this.getRoles();
   },
   watch: {
@@ -271,14 +297,17 @@ export default {
     listHeight() {
       return window.screen.height - 370;
     },
+    retrieveRolesAuthority() {
+      return this.$permission("role:retrieve");
+    },
   },
   methods: {
     selectAllPermissions() {
       this.selectedPermissions = this.permissions.reduce(
         (pre, curr) => [
           ...pre,
-          ...(curr.visit ? curr.visit.map((v) => v.value) : []),
-          ...(curr.action ? curr.action.map((a) => a.value) : []),
+          ...(curr.visit || []).map((v) => v.value),
+          ...(curr.action || []).map((a) => a.value),
         ],
         []
       );
@@ -295,20 +324,29 @@ export default {
 
       this.$notify.success("Update saved!");
       this.selectedPermissionsOrigin = [...this.selectedPermissions];
+
+      // authorities current user owning maybe changed
+      // so reset signed-in user
       await this.$store.dispatch("auth/setSignedInUser");
+      if (this.$store.getters.accessibleRoutes.length === 0) {
+        this.$notify.dismiss();
+        await this.$router.push("/");
+      }
     },
     async getBoundPermissions() {
       const theRole = this.roles.find((r) => r.id === this.activeRole);
-      this.selectedPermissions = theRole.permissions.split(",");
+      this.selectedPermissions = (theRole.permissions || "").split(",");
       this.selectedPermissionsOrigin = [...this.selectedPermissions];
     },
     async getRoles() {
-      this.loadingRoles = true;
-      this.roles = (await getRoles()).result;
-      this.rolesQuantity = JSON.parse(JSON.stringify(this.roles));
-      this.loadingRoles = false;
-
-      await this.$store.dispatch("app/dismissNotification");
+      if (this.retrieveRolesAuthority) {
+        this.selectedRoles = [];
+        this.loadingRoles = true;
+        this.roles = (await getRoles()).result;
+        this.rolesQuantity = JSON.parse(JSON.stringify(this.roles));
+        this.loadingRoles = false;
+        this.$notify.dismiss();
+      }
     },
     filterRole(keyword) {
       this.roles = this.rolesQuantity.filter((r) =>

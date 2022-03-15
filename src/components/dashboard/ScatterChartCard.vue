@@ -8,6 +8,7 @@
 <script>
 import * as echarts from "echarts";
 import { getScatterChartData } from "@/api/dashboard";
+import { scatterChartData } from "@/assets/dashboard";
 
 export default {
   data() {
@@ -20,10 +21,14 @@ export default {
   },
   methods: {
     async drawChart() {
-      const chartData = (await getScatterChartData()).result;
+      const chartData =
+        process.env.NODE_ENV === "development"
+          ? (await getScatterChartData()).result
+          : scatterChartData;
       const chartDom = this.$refs.chartContainer;
       if (chartDom) {
         const myChart = echarts.init(chartDom);
+
         const option = {
           title: {
             text: "Scatter",

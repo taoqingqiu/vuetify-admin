@@ -7,7 +7,7 @@
   >
     <v-card
       :loading="submitting"
-      class="col-lg-3 col-sm-5 col-xl-4 pt-0"
+      class="col-lg-3 col-sm-5 pt-0"
       style="
         margin-bottom: 48px;
         background-color: #17263d;

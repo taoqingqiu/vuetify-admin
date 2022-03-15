@@ -8,6 +8,7 @@
 <script>
 import * as echarts from "echarts";
 import { getPieChartData } from "@/api/dashboard";
+import { pieChartData } from "@/assets/dashboard";
 
 export default {
   data() {
@@ -22,7 +23,11 @@ export default {
     async drawChart() {
       const chartDom = this.$refs.chartContainer;
       if (chartDom) {
-        const chartData = (await getPieChartData()).result;
+        const chartData =
+          process.env.NODE_ENV === "development"
+            ? (await getPieChartData()).result
+            : pieChartData;
+
         const myChart = echarts.init(chartDom);
         const option = {
           title: {

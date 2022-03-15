@@ -126,13 +126,17 @@ router.beforeEach(async (to, _, next) => {
   // reset error
   await store.dispatch("error/reset");
 
+  const token = getAccessToken();
+
   // bring lost user info due to refreshing back to vuex
-  if (!store.state.auth.signedInUser) {
+  if (!store.state.auth.signedInUser && token) {
     await store.dispatch("auth/setSignedInUser");
   }
 
-  const token = getAccessToken();
-  if (token && to.path === "/sign-in") {
+  if (
+    (token && to.path === "/sign-in") ||
+    (!token && to.path !== "/" && to.path !== "/sign-in")
+  ) {
     next({ path: "/", replace: true });
   } else {
     if (!checkExistence(to)) {

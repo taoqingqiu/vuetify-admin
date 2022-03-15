@@ -91,7 +91,9 @@ export default {
         this.warningAlert = false;
       } else {
         this.loading = true;
-        this.roles = (await getRoles()).result;
+        this.roles = this.$permission("role:retrieve")
+          ? (await getRoles()).result
+          : [];
         this.loading = false;
       }
     },
@@ -105,7 +107,7 @@ export default {
         await createUser(this.formData);
         this.$notify.success("Created!");
         setTimeout(() => {
-          this.$notify.info("Reloading..", true);
+          this.$notify.loading("Reloading..");
           this.$emit("reload");
         }, 800);
 

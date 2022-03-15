@@ -9,15 +9,11 @@
     ]
   },
   {
-    "module": "System",
+    "module": "User Management",
     "visit": [
       {
-        "text": "User Management",
+        "text": "Management Page",
         "value": "/system/user-management:visit"
-      },
-      {
-        "text": "Role Management",
-        "value": "/system/role-management:visit"
       }
     ],
     "action": [
@@ -36,6 +32,33 @@
       {
         "text": "Delete User",
         "value": "user:delete"
+      }
+    ]
+  },
+  {
+    "module": "Role Management",
+    "visit": [
+      {
+        "text": "Management Page",
+        "value": "/system/role-management:visit"
+      }
+    ],
+    "action": [
+      {
+        "text": "Create Role",
+        "value": "role:create"
+      },
+      {
+        "text": "Edit Role",
+        "value": "role:update"
+      },
+      {
+        "text": "Retrieve Role",
+        "value": "role:retrieve"
+      },
+      {
+        "text": "Delete Role",
+        "value": "role:delete"
       }
     ]
   },
@@ -62,6 +85,12 @@
       {
         "text": "Child Page",
         "value": "/dynamic-route-demo/:id:visit"
+      }
+    ],
+    "action": [
+      {
+        "text": "Jump To Child Page",
+        "value": "dynamic-demo:jump-to-child"
       }
     ]
   }

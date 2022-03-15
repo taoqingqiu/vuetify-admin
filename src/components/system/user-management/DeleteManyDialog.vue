@@ -35,7 +35,7 @@ export default {
       this.$emit("input", false);
       this.$notify.success("Deleted!");
       setTimeout(() => {
-        this.$notify.info("Reloading..", true);
+        this.$notify.loading("Reloading..");
         this.$emit("reload");
       }, 800);
     },

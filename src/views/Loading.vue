@@ -34,6 +34,8 @@ export default {
           this.$notify.warning(
             "None accessible menus found! contact administrator to get authorized.."
           );
+          await this.$store.dispatch("auth/signOut");
+          await this.$router.push("/sign-in");
         }
       }
 

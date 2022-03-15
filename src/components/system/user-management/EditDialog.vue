@@ -108,10 +108,17 @@ export default {
         this.warningAlert = false;
       } else {
         this.loading = true;
-        this.roles = (await getRoles()).result;
+        this.roles = this.$permission("role:retrieve")
+          ? (await getRoles()).result
+          : [];
         this.formData = JSON.parse(JSON.stringify(this.item));
         this.loading = false;
       }
+    },
+  },
+  computed: {
+    modified() {
+      return JSON.stringify(this.item) !== JSON.stringify(this.formData);
     },
   },
   methods: {
@@ -122,16 +129,19 @@ export default {
           !this.formData["password"] &&
           delete this.formData["password"];
 
-        if (JSON.stringify(this.item) !== JSON.stringify(this.formData)) {
+        if (this.modified) {
           this.submitting = true;
+          delete this.formData["id"];
+          await updateUser(this.item.id, this.formData);
 
-          await updateUser(this.formData);
           this.$notify.success("Update saved!");
+          // authorities current user owning maybe changed
+          // so reset signed-in user
+          await this.$store.dispatch("auth/setSignedInUser");
           setTimeout(() => {
-            this.$notify.info("Reload..", true);
+            this.$notify.loading("Reload..");
             this.$emit("reload");
           }, 800);
-
           this.submitting = false;
         }
         this.$emit("input", false);

@@ -87,7 +87,6 @@
   </v-app-bar>
 </template>
 <script>
-import { removeAccessToken } from "@/utils/storage-util";
 export default {
   data: () => ({
     settingsDrawer: false,
@@ -111,7 +110,7 @@ export default {
       );
     },
     signOut() {
-      removeAccessToken();
+      this.$store.dispatch("auth/signOut");
       this.$router.push("/sign-in");
     },
   },

@@ -5,17 +5,20 @@ const notify = (content, loading = false, level = "info") => {
 };
 
 export const notification = {
-  success(content, loading = false) {
-    notify(content, loading, "success");
+  success(content) {
+    notify(content, false, "success");
   },
-  warning(content, loading = false) {
-    notify(content, loading, "warning");
+  warning(content) {
+    notify(content, false, "warning");
   },
-  error(content, loading = false) {
-    notify(content, loading, "error");
+  error(content) {
+    notify(content, false, "error");
   },
-  info(content, loading = false) {
-    notify(content, loading, "info");
+  info(content) {
+    notify(content, false, "info");
+  },
+  loading(content) {
+    notify(content, true, "info");
   },
   dismiss() {
     store.dispatch("app/dismissNotification");

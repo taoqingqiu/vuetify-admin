@@ -1,5 +1,7 @@
 import { getPermissions, getUserInfo } from "@/api/auth";
 import { mockPermissions, mockUserInfo } from "@/mock/modules/auth";
+import allPermissions from "@/assets/permissions.json";
+import { removeAccessToken } from "@/utils/storage-util";
 
 const state = {
   permissions: [],
@@ -26,11 +28,25 @@ const actions = {
       signedInUser = mockUserInfo;
     } else {
       permissions = (await getPermissions()).result;
+      permissions === "*" &&
+        (permissions = allPermissions.reduce(
+          (pre, curr) => [
+            ...pre,
+            ...(curr.visit || []).map((v) => v.value),
+            ...(curr.action || []).map((a) => a.value),
+          ],
+          []
+        ));
       signedInUser = (await getUserInfo()).result;
     }
 
     commit("SET_PERMISSIONS", permissions);
     commit("SET_SIGNED_IN_USER", signedInUser);
+  },
+  signOut({ commit }) {
+    removeAccessToken();
+    commit("SET_PERMISSIONS", []);
+    commit("SET_SIGNED_IN_USER", "");
   },
 };
 

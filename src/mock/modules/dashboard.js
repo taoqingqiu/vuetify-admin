@@ -2,24 +2,16 @@ import { createResponse } from "../response-util";
 import Mock from "mockjs";
 
 export default {
-  "get|/api/dashboard/overviews": createResponse([
-    {
-      count: 18,
-      total: 100,
-    },
-    {
-      count: 27,
-      total: 120,
-    },
-    {
-      count: 180,
-      total: 200,
-    },
-    {
-      count: 10,
-      total: 20,
-    },
-  ]),
+  "get|/api/dashboard/overviews": createResponse(
+    Mock.mock({
+      "data|4": [
+        {
+          "count|1-37": 37,
+          "total|50-500": 500,
+        },
+      ],
+    })["data"]
+  ),
   "get|/api/dashboard/simple-table-data": createResponse(
     Mock.mock({
       "data|10-12": [

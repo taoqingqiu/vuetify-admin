@@ -6,6 +6,7 @@
     v-model="$store.state.app.navDrawer"
     :dark="!clipped"
     :color="!clipped ? ($vuetify.theme.dark ? '#1e1e1e' : '#17263d') : 'auto'"
+    :floating="!$vuetify.theme.dark && clipped"
   >
     <template #prepend v-if="!clipped">
       <v-list-item dense class="d-flex align-center py-1">

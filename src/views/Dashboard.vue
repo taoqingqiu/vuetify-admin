@@ -6,8 +6,8 @@
         md="3"
         sm="6"
         class="mb-md-0 mb-2"
-        :key="index"
-        v-for="(_, index) in 4"
+        :key="i"
+        v-for="i in 4"
       >
         <v-skeleton-loader type="list-item-three-line" />
       </v-col>
@@ -53,6 +53,7 @@ import OverviewCard from "../components/dashboard/OverviewCard.vue";
 import SimpleTableCard from "../components/dashboard/SimpleTableCard.vue";
 import { getOverviews } from "@/api/dashboard";
 import indexes from "@/assets/overviewIndexes.json";
+import { overviewData } from "@/assets/dashboard";
 
 export default {
   components: {
@@ -74,11 +75,11 @@ export default {
   },
   methods: {
     async getOverviews() {
-      // actully, meanings of our overview items are preset
-      // so, we should do some filling
-      this.overviews = (await getOverviews()).result.map(
-        (d, i) => Object.assign(d, this.indexes[i]) && d
-      );
+      this.overviews = (
+        process.env.NODE_ENV === "development"
+          ? (await getOverviews()).result
+          : overviewData
+      ).map((d, i) => Object.assign(d, this.indexes[i]) && d);
       this.loading = false;
     },
   },

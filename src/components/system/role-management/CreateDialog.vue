@@ -83,13 +83,13 @@ export default {
       const valid = this.$refs.form.validate();
       if (valid) {
         this.submitting = true;
-        await createRole(this.createData);
+        await createRole(this.formData);
         this.submitting = false;
 
         this.$emit("input", false);
         this.$notify.success("Created!");
         setTimeout(() => {
-          this.$notify.info("Reloading..", true);
+          this.$notify.loading("Reloading..");
           this.$emit("reload");
         }, 800);
       }

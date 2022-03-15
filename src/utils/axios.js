@@ -1,9 +1,9 @@
-import axios from "axios";
-import { notification } from "./notify";
-import router from "@/router";
-import { updateAccessToken, removeAccessToken } from "@/utils/storage-util";
+import axios from 'axios';
+import { notification } from '@/plugins/notify';
+import router from '@/router';
+import { updateAccessToken, removeAccessToken } from '@/utils/storage-util';
 
-const basicResponseSuccessInterceptor = (response) => {
+const basicResponseSuccessInterceptor = response => {
   // except for network status code, business status code is well needed too
   // for example, when fetch an access token (use password and username),
   // possible definitions of business status code are below:
@@ -20,7 +20,7 @@ const basicResponseSuccessInterceptor = (response) => {
   return Promise.resolve(response.data);
 };
 
-const basicResponseErrorInterceptor = (err) => {
+const basicResponseErrorInterceptor = async err => {
   notification.error(err);
 
   // especially, once token is invalid or out of date, status 401,
@@ -28,44 +28,38 @@ const basicResponseErrorInterceptor = (err) => {
   // and page will be redirected
   if (err.response.status === 401) {
     removeAccessToken();
-    notification.warning("登录状态已失效，请重新登录");
-    router.push("/");
+    notification.warning('Invalid authentication state! Redirecting to sign-in page');
+    await router.push('/');
   }
 
   return Promise.reject(err);
 };
 
-const basicRequestInterceptor = (config) => {
-  const token = sessionStorage.getItem("va-access-token");
-  token && (config.headers["x-access-token"] = token);
+const basicRequestInterceptor = config => {
+  const token = sessionStorage.getItem('va-access-token');
+  token && (config.headers['x-access-token'] = token);
   return config;
 };
 
 export const jsonAxios = axios.create({
-  baseURL: "/api",
+  baseURL: '/api',
   timeout: 12000,
   withCredentials: false,
-  headers: { "Content-Type": "application/json" },
+  headers: { 'Content-Type': 'application/json' },
 });
 
 jsonAxios.interceptors.request.use(basicRequestInterceptor);
 
-jsonAxios.interceptors.response.use(
-  basicResponseSuccessInterceptor,
-  basicResponseErrorInterceptor
-);
+jsonAxios.interceptors.response.use(basicResponseSuccessInterceptor, basicResponseErrorInterceptor);
 
 export const formDataAxios = axios.create({
-  baseURL: "/api",
+  baseURL: '/api',
   timeout: 12000,
   withCredentials: false,
-  headers: { "Content-Type": "multipart/form-data" },
+  headers: { 'Content-Type': 'multipart/form-data' },
 });
 
 formDataAxios.interceptors.request.use(basicRequestInterceptor);
-formDataAxios.interceptors.response.use(
-  basicResponseSuccessInterceptor,
-  basicResponseErrorInterceptor
-);
+formDataAxios.interceptors.response.use(basicResponseSuccessInterceptor, basicResponseErrorInterceptor);
 
 export default jsonAxios;
