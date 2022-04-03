@@ -1,0 +1,2 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d0d43c8"],{"5fbc":function(t,n,e){"use strict";e.r(n);var a=function(){var t=this,n=t.$createElement,e=t._self._c||n;return e("v-container",{staticClass:"justify-center",attrs:{fluid:"","fill-height":""}},[t._v(" id: "+t._s(t.$route.params.id)+" "),e("br"),t._v(" 动态路由示例子页面 ")])},i=[],r=e("2877"),s=e("6544"),c=e.n(s),l=e("a523"),u={},o=Object(r["a"])(u,a,i,!1,null,null,null);n["default"]=o.exports;c()(o,{VContainer:l["a"]})}}]);
+//# sourceMappingURL=chunk-2d0d43c8.66c9832c.js.map
