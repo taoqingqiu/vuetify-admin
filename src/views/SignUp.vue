@@ -120,34 +120,34 @@
   </v-container>
 </template>
 <script>
-import { version } from "../../package.json";
-import { signUp } from "@/api/auth";
+import { version } from '../../package.json';
+import { signUp } from '@/api/auth';
 
 export default {
   data() {
     return {
-      username: "",
-      password: "",
-      passwordAgain: "",
+      username: '',
+      password: '',
+      passwordAgain: '',
       submitting: false,
       passwordType: true,
       passwordTypeAgain: true,
       warningAlert: false,
       errorAlert: false,
-      indications: { warning: "", error: "" },
+      indications: { warning: '', error: '' },
       version,
     };
   },
   methods: {
     async signUp() {
       // validate and login
-      const valid = this.$refs["signInForm"].validate();
+      const valid = this.$refs['signInForm'].validate();
       if (valid) {
         this.submitting = true;
         const response = await signUp(this.username, this.password);
         if (response.code === 0) {
-          sessionStorage.setItem("va-access-token", response.result);
-          await this.$router.push("/");
+          sessionStorage.setItem('va-access-token', response.result);
+          await this.$router.push('/');
         } else {
           this.indications.error = response.message;
           this.errorAlert = true;
@@ -156,7 +156,7 @@ export default {
       }
     },
     whenPressingEnter(e) {
-      if (e.key === "Enter") {
+      if (e.key === 'Enter') {
         this.signUp();
       }
     },

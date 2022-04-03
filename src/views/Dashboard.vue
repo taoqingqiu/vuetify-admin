@@ -46,14 +46,14 @@
   </v-container>
 </template>
 <script>
-import LineChartCard from "../components/dashboard/LineChartCard.vue";
-import PieChartCard from "../components/dashboard/PieChartCard.vue";
-import ScatterChartCard from "../components/dashboard/ScatterChartCard.vue";
-import OverviewCard from "../components/dashboard/OverviewCard.vue";
-import SimpleTableCard from "../components/dashboard/SimpleTableCard.vue";
-import { getOverviews } from "@/api/dashboard";
-import indexes from "@/assets/overviewIndexes.json";
-import { overviewData } from "@/assets/dashboard";
+import LineChartCard from '../components/dashboard/LineChartCard.vue';
+import PieChartCard from '../components/dashboard/PieChartCard.vue';
+import ScatterChartCard from '../components/dashboard/ScatterChartCard.vue';
+import OverviewCard from '../components/dashboard/OverviewCard.vue';
+import SimpleTableCard from '../components/dashboard/SimpleTableCard.vue';
+import { getOverviews } from '@/api/dashboard';
+import indexes from '@/assets/overviewIndexes.json';
+import { overviewData } from '@/assets/dashboard';
 
 export default {
   components: {
@@ -76,7 +76,7 @@ export default {
   methods: {
     async getOverviews() {
       this.overviews = (
-        process.env.NODE_ENV === "development"
+        process.env.NODE_ENV === 'development'
           ? (await getOverviews()).result
           : overviewData
       ).map((d, i) => Object.assign(d, this.indexes[i]) && d);

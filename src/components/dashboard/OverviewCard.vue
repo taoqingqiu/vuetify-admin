@@ -27,6 +27,6 @@
 </template>
 <script>
 export default {
-  props: ["title", "count", "total", "color", "icon", "unit", "path"],
+  props: ['title', 'count', 'total', 'color', 'icon', 'unit', 'path'],
 };
 </script>

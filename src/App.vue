@@ -24,15 +24,15 @@
   </v-app>
 </template>
 <script>
-import Error from "./components/app/Error.vue";
-import AppBar from "./components/app/AppBar.vue";
-import NavDrawer from "./components/app/NavDrawer.vue";
-import Notification from "./components/app/Notification.vue";
+import Error from './components/app/Error.vue';
+import AppBar from './components/app/AppBar.vue';
+import NavDrawer from './components/app/NavDrawer.vue';
+import Notification from './components/app/Notification.vue';
 
-const conciseRouteList = ["/sign-in", "/sign-up", "/"];
+const conciseRouteList = ['/sign-in', '/sign-up', '/'];
 
 export default {
-  name: "App",
+  name: 'App',
   components: {
     Notification,
     AppBar,
@@ -51,7 +51,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "styles/main.scss";
+@import 'styles/main.scss';
 
 html {
   overflow-y: auto !important;

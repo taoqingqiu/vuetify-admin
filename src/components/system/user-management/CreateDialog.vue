@@ -63,16 +63,16 @@
   </v-dialog>
 </template>
 <script>
-import { getRoles } from "@/api/role";
-import { createUser } from "@/api/user";
+import { getRoles } from '@/api/role';
+import { createUser } from '@/api/user';
 
 export default {
-  props: ["value"],
+  props: ['value'],
   data() {
     return {
       indications: {
-        warning: "",
-        error: "",
+        warning: '',
+        error: '',
       },
       warningAlert: false,
       errorAlert: false,
@@ -91,7 +91,7 @@ export default {
         this.warningAlert = false;
       } else {
         this.loading = true;
-        this.roles = this.$permission("role:retrieve")
+        this.roles = this.$permission('role:retrieve')
           ? (await getRoles()).result
           : [];
         this.loading = false;
@@ -105,14 +105,14 @@ export default {
         this.submitting = true;
 
         await createUser(this.formData);
-        this.$notify.success("Created!");
+        this.$notify.success('Created!');
         setTimeout(() => {
-          this.$notify.loading("Reloading..");
-          this.$emit("reload");
+          this.$notify.loading('Reloading..');
+          this.$emit('reload');
         }, 800);
 
         this.submitting = false;
-        this.$emit("input", false);
+        this.$emit('input', false);
       }
     },
   },

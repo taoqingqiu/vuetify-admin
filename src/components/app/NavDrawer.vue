@@ -164,18 +164,18 @@
       <v-divider />
       <v-btn block @click="mini = !mini" text>
         <v-icon>{{
-          mini ? "mdi-chevron-double-right" : "mdi-chevron-double-left"
+          mini ? 'mdi-chevron-double-right' : 'mdi-chevron-double-left'
         }}</v-icon>
       </v-btn>
     </template>
   </v-navigation-drawer>
 </template>
 <script>
-import { routes } from "@/router";
+import { routes } from '@/router';
 
 export default {
   components: {
-    TailedTooltip: () => import("@/components/TailedTooltip.vue"),
+    TailedTooltip: () => import('@/components/TailedTooltip.vue'),
   },
   data: () => ({
     mini: false,
@@ -183,7 +183,7 @@ export default {
     tooltip: {},
   }),
   watch: {
-    "$vuetify.breakpoint.mdAndDown"(val) {
+    '$vuetify.breakpoint.mdAndDown'(val) {
       if (val) {
         this.mini = false;
       }
@@ -213,15 +213,15 @@ export default {
       tree.forEach((t) => {
         const currPath = parentPath ? `${parentPath}/${t.path}` : t.path;
         if (!t.children) {
-          !currPath.includes(":") &&
+          !currPath.includes(':') &&
             this.accessibleRoutes.includes(currPath) &&
             result.push(t);
         } else {
           const childrenResult = this.buildAccessibleTree(t.children, currPath);
           if (childrenResult.length) {
             const nodeNew = JSON.parse(JSON.stringify(t));
-            delete nodeNew["children"];
-            nodeNew["children"] = childrenResult;
+            delete nodeNew['children'];
+            nodeNew['children'] = childrenResult;
             result.push(nodeNew);
           }
         }

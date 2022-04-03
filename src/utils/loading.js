@@ -9,8 +9,13 @@ export const showLoading = () => {
   let progress = 0;
   store.commit('app/SET_LOADING', { isLoading: true, progress });
   intervalHandle = setInterval(() => {
-    if (process.env.NODE_ENV === 'development') console.log('[DEBUG] loading timer is working..');
-    if (!store.state.app.loading.isLoading || progress >= 80 || store.state.app.loading.progress > progress) {
+    if (process.env.NODE_ENV === 'development')
+      console.log('[DEBUG] loading timer is working..');
+    if (
+      !store.state.app.loading.isLoading ||
+      progress >= 80 ||
+      store.state.app.loading.progress > progress
+    ) {
       intervalHandle && clearInterval(intervalHandle);
       return;
     }

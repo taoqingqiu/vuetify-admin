@@ -3,7 +3,7 @@ import { notification } from '@/plugins/notify';
 import router from '@/router';
 import { updateAccessToken, removeAccessToken } from '@/utils/storage-util';
 
-const basicResponseSuccessInterceptor = response => {
+const basicResponseSuccessInterceptor = (response) => {
   // except for network status code, business status code is well needed too
   // for example, when fetch an access token (use password and username),
   // possible definitions of business status code are below:
@@ -20,7 +20,7 @@ const basicResponseSuccessInterceptor = response => {
   return Promise.resolve(response.data);
 };
 
-const basicResponseErrorInterceptor = async err => {
+const basicResponseErrorInterceptor = async (err) => {
   notification.error(err);
 
   // especially, once token is invalid or out of date, status 401,
@@ -28,14 +28,16 @@ const basicResponseErrorInterceptor = async err => {
   // and page will be redirected
   if (err.response.status === 401) {
     removeAccessToken();
-    notification.warning('Invalid authentication state! Redirecting to sign-in page');
+    notification.warning(
+      'Invalid authentication state! Redirecting to sign-in page'
+    );
     await router.push('/');
   }
 
   return Promise.reject(err);
 };
 
-const basicRequestInterceptor = config => {
+const basicRequestInterceptor = (config) => {
   const token = sessionStorage.getItem('va-access-token');
   token && (config.headers['x-access-token'] = token);
   return config;
@@ -50,7 +52,10 @@ export const jsonAxios = axios.create({
 
 jsonAxios.interceptors.request.use(basicRequestInterceptor);
 
-jsonAxios.interceptors.response.use(basicResponseSuccessInterceptor, basicResponseErrorInterceptor);
+jsonAxios.interceptors.response.use(
+  basicResponseSuccessInterceptor,
+  basicResponseErrorInterceptor
+);
 
 export const formDataAxios = axios.create({
   baseURL: '/api',
@@ -60,6 +65,9 @@ export const formDataAxios = axios.create({
 });
 
 formDataAxios.interceptors.request.use(basicRequestInterceptor);
-formDataAxios.interceptors.response.use(basicResponseSuccessInterceptor, basicResponseErrorInterceptor);
+formDataAxios.interceptors.response.use(
+  basicResponseSuccessInterceptor,
+  basicResponseErrorInterceptor
+);
 
 export default jsonAxios;

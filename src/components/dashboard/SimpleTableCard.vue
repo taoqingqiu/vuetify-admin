@@ -29,8 +29,8 @@
   </v-card>
 </template>
 <script>
-import { getSimpleTableData } from "@/api/dashboard";
-import { simpleDataTableData } from "@/assets/dashboard";
+import { getSimpleTableData } from '@/api/dashboard';
+import { simpleDataTableData } from '@/assets/dashboard';
 
 export default {
   data() {
@@ -45,7 +45,7 @@ export default {
   methods: {
     async getItems() {
       this.items =
-        process.env.NODE_ENV === "development"
+        process.env.NODE_ENV === 'development'
           ? (await getSimpleTableData()).result
           : simpleDataTableData;
       this.loading = false;

@@ -31,8 +31,8 @@
       <v-icon small>
         {{
           $vuetify.theme.dark
-            ? "mdi-white-balance-sunny"
-            : "mdi-moon-waxing-crescent"
+            ? 'mdi-white-balance-sunny'
+            : 'mdi-moon-waxing-crescent'
         }}
       </v-icon>
     </v-btn>
@@ -44,7 +44,7 @@
     >
       <v-icon small>
         {{
-          !clipped ? "$vuetify.icons.layout-clipped" : "$vuetify.icons.layout"
+          !clipped ? '$vuetify.icons.layout-clipped' : '$vuetify.icons.layout'
         }}
       </v-icon>
     </v-btn>
@@ -53,7 +53,7 @@
       <template v-slot:activator="{ on, attrs }">
         <v-btn icon v-on="on" v-bind="attrs" class="mr-1" light small>
           <v-avatar size="24px" color="rgb(207, 224, 214)">
-            {{ signedInUser[0] || "" }}
+            {{ signedInUser[0] || '' }}
           </v-avatar>
         </v-btn>
       </template>
@@ -105,13 +105,13 @@ export default {
   methods: {
     showNavDrawer() {
       this.$store.commit(
-        "app/SET_NAV_DRAWER",
+        'app/SET_NAV_DRAWER',
         !this.$store.state.app.navDrawer
       );
     },
     signOut() {
-      this.$store.dispatch("auth/signOut");
-      this.$router.push("/sign-in");
+      this.$store.dispatch('auth/signOut');
+      this.$router.push('/sign-in');
     },
   },
 };

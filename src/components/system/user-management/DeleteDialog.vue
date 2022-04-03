@@ -17,10 +17,10 @@
   </v-dialog>
 </template>
 <script>
-import { deleteUsers } from "@/api/user";
+import { deleteUsers } from '@/api/user';
 
 export default {
-  props: ["value", "item"],
+  props: ['value', 'item'],
   data() {
     return {
       submitting: false,
@@ -31,12 +31,12 @@ export default {
       this.submitting = true;
       await deleteUsers([this.item.id]);
       this.submitting = false;
-      this.$emit("input", false);
+      this.$emit('input', false);
 
       this.$notify.success(`Deleted!`);
       setTimeout(() => {
-        this.$notify.loading("Reload..");
-        this.$emit("reload");
+        this.$notify.loading('Reload..');
+        this.$emit('reload');
       }, 800);
     },
   },

@@ -53,14 +53,14 @@
   </v-dialog>
 </template>
 <script>
-import { createRole } from "@/api/role";
+import { createRole } from '@/api/role';
 export default {
-  props: ["value", "menus"],
+  props: ['value', 'menus'],
   data() {
     return {
       indications: {
-        warning: "",
-        error: "",
+        warning: '',
+        error: '',
       },
       warningAlert: false,
       errorAlert: false,
@@ -86,11 +86,11 @@ export default {
         await createRole(this.formData);
         this.submitting = false;
 
-        this.$emit("input", false);
-        this.$notify.success("Created!");
+        this.$emit('input', false);
+        this.$notify.success('Created!');
         setTimeout(() => {
-          this.$notify.loading("Reloading..");
-          this.$emit("reload");
+          this.$notify.loading('Reloading..');
+          this.$emit('reload');
         }, 800);
       }
     },

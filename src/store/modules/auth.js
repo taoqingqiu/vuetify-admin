@@ -1,11 +1,11 @@
-import { getPermissions, getUserInfo } from "@/api/auth";
-import { mockPermissions, mockUserInfo } from "@/mock/modules/auth";
-import allPermissions from "@/assets/permissions.json";
-import { removeAccessToken } from "@/utils/storage-util";
+import { getPermissions, getUserInfo } from '@/api/auth';
+import { mockPermissions, mockUserInfo } from '@/mock/modules/auth';
+import allPermissions from '@/assets/permissions.json';
+import { removeAccessToken } from '@/utils/storage-util';
 
 const state = {
   permissions: [],
-  signedInUser: "",
+  signedInUser: '',
 };
 
 const mutations = {
@@ -23,12 +23,12 @@ const actions = {
     // so when in dev environment, using mock data to directly resume
     // info of user signed in and permissions when refreshing
     let permissions, signedInUser;
-    if (process.env.NODE_ENV === "development") {
+    if (process.env.NODE_ENV === 'development') {
       permissions = mockPermissions;
       signedInUser = mockUserInfo;
     } else {
       permissions = (await getPermissions()).result;
-      permissions === "*" &&
+      permissions === '*' &&
         (permissions = allPermissions.reduce(
           (pre, curr) => [
             ...pre,
@@ -40,13 +40,13 @@ const actions = {
       signedInUser = (await getUserInfo()).result;
     }
 
-    commit("SET_PERMISSIONS", permissions);
-    commit("SET_SIGNED_IN_USER", signedInUser);
+    commit('SET_PERMISSIONS', permissions);
+    commit('SET_SIGNED_IN_USER', signedInUser);
   },
   signOut({ commit }) {
     removeAccessToken();
-    commit("SET_PERMISSIONS", []);
-    commit("SET_SIGNED_IN_USER", "");
+    commit('SET_PERMISSIONS', []);
+    commit('SET_SIGNED_IN_USER', '');
   },
 };
 

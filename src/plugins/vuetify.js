@@ -1,7 +1,7 @@
-import Vue from "vue";
-import Vuetify from "vuetify/lib/framework";
-import LayoutIcon from "@/components/app/LayouIcon.vue";
-import LayoutClippedIcon from "@/components/app/LayoutClippedIcon.vue";
+import Vue from 'vue';
+import Vuetify from 'vuetify/lib/framework';
+import LayoutIcon from '@/components/app/LayouIcon.vue';
+import LayoutClippedIcon from '@/components/app/LayoutClippedIcon.vue';
 
 Vue.use(Vuetify);
 
@@ -11,7 +11,7 @@ export default new Vuetify({
       layout: {
         component: LayoutIcon,
       },
-      "layout-clipped": {
+      'layout-clipped': {
         component: LayoutClippedIcon,
       },
     },

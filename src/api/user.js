@@ -1,10 +1,10 @@
-import axios from "../utils/axios";
+import axios from '../utils/axios';
 
 /**
  * Get user list
  * @returns
  */
-export const getUsers = () => axios.get("/user-management/users");
+export const getUsers = () => axios.get('/user-management/users');
 
 /**
  * Create one user
@@ -12,7 +12,7 @@ export const getUsers = () => axios.get("/user-management/users");
  * @returns
  */
 export const createUser = (formData) =>
-  axios.post("/user-management/user", formData);
+  axios.post('/user-management/user', formData);
 
 /**
  * Update one certain user
@@ -29,4 +29,4 @@ export const updateUser = (id, formData) =>
  * @returns
  */
 export const deleteUsers = (ids) =>
-  axios.delete("/user-management/users", { data: { ids } });
+  axios.delete('/user-management/users', { data: { ids } });

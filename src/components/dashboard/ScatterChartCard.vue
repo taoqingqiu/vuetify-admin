@@ -6,9 +6,9 @@
   </v-card>
 </template>
 <script>
-import * as echarts from "echarts";
-import { getScatterChartData } from "@/api/dashboard";
-import { scatterChartData } from "@/assets/dashboard";
+import * as echarts from 'echarts';
+import { getScatterChartData } from '@/api/dashboard';
+import { scatterChartData } from '@/assets/dashboard';
 
 export default {
   data() {
@@ -22,7 +22,7 @@ export default {
   methods: {
     async drawChart() {
       const chartData =
-        process.env.NODE_ENV === "development"
+        process.env.NODE_ENV === 'development'
           ? (await getScatterChartData()).result
           : scatterChartData;
       const chartDom = this.$refs.chartContainer;
@@ -31,7 +31,7 @@ export default {
 
         const option = {
           title: {
-            text: "Scatter",
+            text: 'Scatter',
           },
           xAxis: {},
           yAxis: {},
@@ -42,7 +42,7 @@ export default {
             {
               symbolSize: 20,
               data: chartData,
-              type: "scatter",
+              type: 'scatter',
             },
           ],
         };

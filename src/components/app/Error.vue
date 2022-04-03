@@ -11,11 +11,11 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import illustrations from "@/assets/illustrations";
+import { mapState } from 'vuex';
+import illustrations from '@/assets/illustrations';
 
 export default {
-  name: "Error",
+  name: 'Error',
   computed: {
     ...mapState({
       error: (state) => state.error,
@@ -27,7 +27,7 @@ export default {
           illuArr[Math.floor(Math.random() * illuArr.length)]
         }`);
       }
-      return "";
+      return '';
     },
   },
   mounted() {

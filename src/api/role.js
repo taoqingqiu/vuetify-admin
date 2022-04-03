@@ -1,10 +1,10 @@
-import axios from "../utils/axios";
+import axios from '../utils/axios';
 
 /**
  * Get role list
  * @returns {*}
  */
-export const getRoles = () => axios.get("/role-management/roles");
+export const getRoles = () => axios.get('/role-management/roles');
 
 /**
  * Create one new role
@@ -12,7 +12,7 @@ export const getRoles = () => axios.get("/role-management/roles");
  * @returns
  */
 export const createRole = (formData) =>
-  axios.post("/role-management/role", formData);
+  axios.post('/role-management/role', formData);
 
 /**
  * Update certain role
@@ -29,4 +29,4 @@ export const updateRole = (id, formData) =>
  * @returns
  */
 export const deleteRoles = (ids) =>
-  axios.delete("/role-management/roles", { data: { ids } });
+  axios.delete('/role-management/roles', { data: { ids } });

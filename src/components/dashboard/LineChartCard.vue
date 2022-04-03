@@ -6,9 +6,9 @@
   </v-card>
 </template>
 <script>
-import * as echarts from "echarts";
-import { getLineChartData } from "@/api/dashboard";
-import { lineChartData } from "@/assets/dashboard";
+import * as echarts from 'echarts';
+import { getLineChartData } from '@/api/dashboard';
+import { lineChartData } from '@/assets/dashboard';
 
 export default {
   data() {
@@ -24,21 +24,21 @@ export default {
       const chartDom = this.$refs.chartContainer;
       if (chartDom) {
         const chartData =
-          process.env.NODE_ENV === "development"
+          process.env.NODE_ENV === 'development'
             ? (await getLineChartData()).result
             : lineChartData;
         const myChart = echarts.init(chartDom);
         const option = {
           title: {
-            text: "Line",
-            left: "left",
+            text: 'Line',
+            left: 'left',
           },
           xAxis: {
-            type: "category",
+            type: 'category',
             data: chartData.map((cd) => cd.name),
           },
           yAxis: {
-            type: "value",
+            type: 'value',
           },
           tooltip: {
             show: true,
@@ -46,7 +46,7 @@ export default {
           series: [
             {
               data: chartData.map((cd) => cd.value),
-              type: "line",
+              type: 'line',
               smooth: true,
             },
           ],

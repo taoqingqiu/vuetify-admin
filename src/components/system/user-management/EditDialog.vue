@@ -76,17 +76,17 @@
   </v-dialog>
 </template>
 <script>
-import { getRoles } from "@/api/role";
-import { updateUser } from "@/api/user";
+import { getRoles } from '@/api/role';
+import { updateUser } from '@/api/user';
 
 export default {
-  props: ["value", "item"],
+  props: ['value', 'item'],
   data() {
     return {
       // indications
       indications: {
-        warning: "",
-        error: "",
+        warning: '',
+        error: '',
       },
       warningAlert: false,
       errorAlert: false,
@@ -108,7 +108,7 @@ export default {
         this.warningAlert = false;
       } else {
         this.loading = true;
-        this.roles = this.$permission("role:retrieve")
+        this.roles = this.$permission('role:retrieve')
           ? (await getRoles()).result
           : [];
         this.formData = JSON.parse(JSON.stringify(this.item));
@@ -125,26 +125,26 @@ export default {
     async submit() {
       const valid = this.$refs.form.validate();
       if (valid) {
-        "password" in this.formData &&
-          !this.formData["password"] &&
-          delete this.formData["password"];
+        'password' in this.formData &&
+          !this.formData['password'] &&
+          delete this.formData['password'];
 
         if (this.modified) {
           this.submitting = true;
-          delete this.formData["id"];
+          delete this.formData['id'];
           await updateUser(this.item.id, this.formData);
 
-          this.$notify.success("Update saved!");
+          this.$notify.success('Update saved!');
           // authorities current user owning maybe changed
           // so reset signed-in user
-          await this.$store.dispatch("auth/setSignedInUser");
+          await this.$store.dispatch('auth/setSignedInUser');
           setTimeout(() => {
-            this.$notify.loading("Reload..");
-            this.$emit("reload");
+            this.$notify.loading('Reload..');
+            this.$emit('reload');
           }, 800);
           this.submitting = false;
         }
-        this.$emit("input", false);
+        this.$emit('input', false);
       }
     },
   },

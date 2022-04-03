@@ -6,9 +6,9 @@
   </v-card>
 </template>
 <script>
-import * as echarts from "echarts";
-import { getPieChartData } from "@/api/dashboard";
-import { pieChartData } from "@/assets/dashboard";
+import * as echarts from 'echarts';
+import { getPieChartData } from '@/api/dashboard';
+import { pieChartData } from '@/assets/dashboard';
 
 export default {
   data() {
@@ -24,34 +24,34 @@ export default {
       const chartDom = this.$refs.chartContainer;
       if (chartDom) {
         const chartData =
-          process.env.NODE_ENV === "development"
+          process.env.NODE_ENV === 'development'
             ? (await getPieChartData()).result
             : pieChartData;
 
         const myChart = echarts.init(chartDom);
         const option = {
           title: {
-            text: "Pie",
-            left: "left",
+            text: 'Pie',
+            left: 'left',
           },
           tooltip: {
-            trigger: "item",
+            trigger: 'item',
           },
           legend: {
-            orient: "horizentl",
-            bottom: "bottom",
+            orient: 'horizentl',
+            bottom: 'bottom',
           },
           series: [
             {
-              name: "Items",
-              type: "pie",
-              radius: "50%",
+              name: 'Items',
+              type: 'pie',
+              radius: '50%',
               data: chartData,
               emphasis: {
                 itemStyle: {
                   shadowBlur: 10,
                   shadowOffsetX: 0,
-                  shadowColor: "rgba(0, 0, 0, 0.5)",
+                  shadowColor: 'rgba(0, 0, 0, 0.5)',
                 },
               },
             },

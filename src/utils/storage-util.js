@@ -1,4 +1,4 @@
-const accessTokenKey = "va-access-token";
+const accessTokenKey = 'va-access-token';
 
 export const getAccessToken = () =>
   sessionStorage.getItem(accessTokenKey) ||

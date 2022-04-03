@@ -1,4 +1,4 @@
-import axios from "../utils/axios";
+import axios from '../utils/axios';
 
 /**
  * Get access-token
@@ -8,21 +8,21 @@ import axios from "../utils/axios";
  * @returns
  */
 export const getToken = (username, password) =>
-  axios.get("/auth/token", { params: { username, password } });
+  axios.get('/auth/token', { params: { username, password } });
 
 /**
  * Get permissions
  *
  * @returns
  */
-export const getPermissions = () => axios.get("/auth/permissions");
+export const getPermissions = () => axios.get('/auth/permissions');
 
 /**
  * Get info of signed-in user
  *
  * @returns
  */
-export const getUserInfo = () => axios.get("/auth/user-info");
+export const getUserInfo = () => axios.get('/auth/user-info');
 
 /**
  * Sign up
@@ -31,4 +31,4 @@ export const getUserInfo = () => axios.get("/auth/user-info");
  * @returns {Promise<AxiosResponse<any>>}
  */
 export const signUp = (username, password) =>
-  axios.post("/auth/user", { username, password });
+  axios.post('/auth/user', { username, password });

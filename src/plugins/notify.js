@@ -1,27 +1,27 @@
-import store from "../store";
+import store from '../store';
 
-const notify = (content, loading = false, level = "info") => {
-  store.commit("app/SET_NOTIFICATION", { show: true, loading, content, level });
+const notify = (content, loading = false, level = 'info') => {
+  store.commit('app/SET_NOTIFICATION', { show: true, loading, content, level });
 };
 
 export const notification = {
   success(content) {
-    notify(content, false, "success");
+    notify(content, false, 'success');
   },
   warning(content) {
-    notify(content, false, "warning");
+    notify(content, false, 'warning');
   },
   error(content) {
-    notify(content, false, "error");
+    notify(content, false, 'error');
   },
   info(content) {
-    notify(content, false, "info");
+    notify(content, false, 'info');
   },
   loading(content) {
-    notify(content, true, "info");
+    notify(content, true, 'info');
   },
   dismiss() {
-    store.dispatch("app/dismissNotification");
+    store.dispatch('app/dismissNotification');
   },
 };
 

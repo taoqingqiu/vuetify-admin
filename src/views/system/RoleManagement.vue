@@ -80,7 +80,7 @@
                       {{ role.name }}
                     </v-list-item-title>
                     <v-list-item-subtitle :title="role.description">
-                      {{ role.description || "No description" }}
+                      {{ role.description || 'No description' }}
                     </v-list-item-subtitle>
                   </v-list-item-content>
                   <v-btn
@@ -135,8 +135,8 @@
         flat
       >
         {{
-          $permission("role:update")
-            ? "Click certain role to edit permissions."
+          $permission('role:update')
+            ? 'Click certain role to edit permissions.'
             : "Don't have the authority to edit roles."
         }}
       </v-card>
@@ -226,15 +226,15 @@
   </v-container>
 </template>
 <script>
-import { getRoles, updateRole } from "@/api/role";
-import DeleteDialog from "@/components/system/role-management/DeleteDialog.vue";
-import DeleteManyDialog from "@/components/system/role-management/DeleteManyDialog.vue";
-import CreateDialog from "@/components/system/role-management/CreateDialog.vue";
-import EditDialog from "@/components/system/role-management/EditDialog.vue";
-import permissions from "@/assets/permissions.json";
+import { getRoles, updateRole } from '@/api/role';
+import DeleteDialog from '@/components/system/role-management/DeleteDialog.vue';
+import DeleteManyDialog from '@/components/system/role-management/DeleteManyDialog.vue';
+import CreateDialog from '@/components/system/role-management/CreateDialog.vue';
+import EditDialog from '@/components/system/role-management/EditDialog.vue';
+import permissions from '@/assets/permissions.json';
 
 export default {
-  name: "RoleManagement",
+  name: 'RoleManagement',
   components: { CreateDialog, DeleteDialog, EditDialog, DeleteManyDialog },
   data() {
     return {
@@ -246,9 +246,9 @@ export default {
       loadingRoles: false,
       // permissions
       headers: [
-        { text: "Module", value: "module" },
-        { text: "Visit", value: "visit", sortable: false },
-        { text: "Action", value: "action", sortable: false },
+        { text: 'Module', value: 'module' },
+        { text: 'Visit', value: 'visit', sortable: false },
+        { text: 'Action', value: 'action', sortable: false },
       ],
       permissions,
       selectedPermissions: [],
@@ -261,7 +261,7 @@ export default {
       editDialog: false,
       // search
       rolesQuantity: [],
-      keyword: "",
+      keyword: '',
     };
   },
   created() {
@@ -298,7 +298,7 @@ export default {
       return window.screen.height - 370;
     },
     retrieveRolesAuthority() {
-      return this.$permission("role:retrieve");
+      return this.$permission('role:retrieve');
     },
   },
   methods: {
@@ -314,7 +314,7 @@ export default {
     },
     async updateBoundPermissions() {
       this.updating = true;
-      const permissions = this.selectedPermissions.join(",");
+      const permissions = this.selectedPermissions.join(',');
       await updateRole(this.activeRole, {
         permissions,
       });
@@ -322,20 +322,20 @@ export default {
       theRole.permissions = permissions;
       this.updating = false;
 
-      this.$notify.success("Update saved!");
+      this.$notify.success('Update saved!');
       this.selectedPermissionsOrigin = [...this.selectedPermissions];
 
       // authorities current user owning maybe changed
       // so reset signed-in user
-      await this.$store.dispatch("auth/setSignedInUser");
+      await this.$store.dispatch('auth/setSignedInUser');
       if (this.$store.getters.accessibleRoutes.length === 0) {
         this.$notify.dismiss();
-        await this.$router.push("/");
+        await this.$router.push('/');
       }
     },
     async getBoundPermissions() {
       const theRole = this.roles.find((r) => r.id === this.activeRole);
-      this.selectedPermissions = (theRole.permissions || "").split(",");
+      this.selectedPermissions = (theRole.permissions || '').split(',');
       this.selectedPermissionsOrigin = [...this.selectedPermissions];
     },
     async getRoles() {

@@ -28,10 +28,10 @@
 export default {
   data: () => ({
     snackerBarIconDict: {
-      info: "mdi-information",
-      warning: "mdi-alert",
-      success: "mdi-check-circle",
-      error: "mdi-alert-circle",
+      info: 'mdi-information',
+      warning: 'mdi-alert',
+      success: 'mdi-check-circle',
+      error: 'mdi-alert-circle',
     },
   }),
   computed: {

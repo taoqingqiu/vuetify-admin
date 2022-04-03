@@ -19,113 +19,113 @@ export const overviewData = [
 
 export const simpleDataTableData = [
   {
-    name: "8#UKu",
+    name: '8#UKu',
     value: 32,
   },
   {
-    name: "Ge*4T",
+    name: 'Ge*4T',
     value: 58,
   },
   {
-    name: "mBMDJ",
+    name: 'mBMDJ',
     value: 50,
   },
   {
-    name: "bB!41",
+    name: 'bB!41',
     value: 30,
   },
   {
-    name: "[[(!V",
+    name: '[[(!V',
     value: 28,
   },
   {
-    name: "&0!3*",
+    name: '&0!3*',
     value: 32,
   },
   {
-    name: "oM5nD",
+    name: 'oM5nD',
     value: 4,
   },
   {
-    name: "w6Oxl",
+    name: 'w6Oxl',
     value: 65,
   },
   {
-    name: "@QOlB",
+    name: '@QOlB',
     value: 15,
   },
   {
-    name: "8upMX",
+    name: '8upMX',
     value: 28,
   },
   {
-    name: "9hQjQ",
+    name: '9hQjQ',
     value: 2,
   },
 ];
 
 export const lineChartData = [
   {
-    name: "3]6BKAxM",
+    name: '3]6BKAxM',
     value: 48,
   },
   {
-    name: "oGfK2Z",
+    name: 'oGfK2Z',
     value: 58,
   },
   {
-    name: "7OwuiP",
+    name: '7OwuiP',
     value: 81,
   },
   {
-    name: "OtyxIz",
+    name: 'OtyxIz',
     value: 29,
   },
   {
-    name: "wmAf)V",
+    name: 'wmAf)V',
     value: 49,
   },
   {
-    name: "znLQU6",
+    name: 'znLQU6',
     value: 63,
   },
   {
-    name: "YM5)Ik",
+    name: 'YM5)Ik',
     value: 16,
   },
   {
-    name: "zyLm1bg",
+    name: 'zyLm1bg',
     value: 39,
   },
   {
-    name: "240Os",
+    name: '240Os',
     value: 58,
   },
   {
-    name: "gT@OxC7U",
+    name: 'gT@OxC7U',
     value: 72,
   },
 ];
 
 export const pieChartData = [
   {
-    name: "E^oH",
+    name: 'E^oH',
     value: 69,
   },
   {
-    name: "$p1D",
+    name: '$p1D',
     value: 13,
   },
   {
-    name: "E[l!",
+    name: 'E[l!',
     value: 97,
   },
   {
-    name: "mHzM",
+    name: 'mHzM',
     value: 40,
   },
   {
-    name: "gi*m",
+    name: 'gi*m',
     value: 50,
   },
 ];

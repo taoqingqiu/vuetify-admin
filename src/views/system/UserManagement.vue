@@ -75,7 +75,7 @@
             roles
               .slice(4)
               .map((r) => r.name)
-              .join(", ")
+              .join(', ')
           }}
         </tailed-tooltip>
       </template>
@@ -89,7 +89,7 @@
           dot
           class="text-caption pr-4"
         >
-          {{ state === 1 ? "Normal" : "Frozen" }}
+          {{ state === 1 ? 'Normal' : 'Frozen' }}
         </v-badge>
       </template>
 
@@ -144,12 +144,12 @@
   </v-container>
 </template>
 <script>
-import { getUsers } from "@/api/user";
-import CreateDialog from "@/components/system/user-management/CreateDialog.vue";
-import DeleteDialog from "@/components/system/user-management/DeleteDialog.vue";
-import DeleteManyDialog from "@/components/system/user-management/DeleteManyDialog.vue";
-import EditDialog from "@/components/system/user-management/EditDialog.vue";
-import TailedTooltip from "@/components/TailedTooltip";
+import { getUsers } from '@/api/user';
+import CreateDialog from '@/components/system/user-management/CreateDialog.vue';
+import DeleteDialog from '@/components/system/user-management/DeleteDialog.vue';
+import DeleteManyDialog from '@/components/system/user-management/DeleteManyDialog.vue';
+import EditDialog from '@/components/system/user-management/EditDialog.vue';
+import TailedTooltip from '@/components/TailedTooltip';
 
 export default {
   components: {
@@ -159,17 +159,17 @@ export default {
     DeleteDialog,
     DeleteManyDialog,
   },
-  name: "UserManagement",
+  name: 'UserManagement',
   data() {
     return {
       headers: [
-        { text: "Username", value: "username" },
-        { text: "Roles", value: "roles", sortable: false },
-        { text: "State", value: "state", align: "center" },
-        { text: "Actions", value: "actions", align: "center", sortable: false },
+        { text: 'Username', value: 'username' },
+        { text: 'Roles', value: 'roles', sortable: false },
+        { text: 'State', value: 'state', align: 'center' },
+        { text: 'Actions', value: 'actions', align: 'center', sortable: false },
       ],
       items: [],
-      search: "",
+      search: '',
       selectedItems: [],
       selectedItem: null,
       loading: false,
@@ -188,8 +188,8 @@ export default {
   },
   created() {
     this.getUsers();
-    !this.$permission("user:delete") &&
-      !this.$permission("user:update") &&
+    !this.$permission('user:delete') &&
+      !this.$permission('user:update') &&
       this.headers.pop();
   },
   computed: {
@@ -197,7 +197,7 @@ export default {
       return window.screen.height - 350;
     },
     retrieveUsersAuthority() {
-      return this.$permission("user:retrieve");
+      return this.$permission('user:retrieve');
     },
   },
   methods: {

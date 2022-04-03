@@ -112,35 +112,35 @@
   </v-container>
 </template>
 <script>
-import { version } from "../../package.json";
-import { getToken } from "@/api/auth";
+import { version } from '../../package.json';
+import { getToken } from '@/api/auth';
 
 export default {
   data() {
     return {
-      username: "",
-      password: "",
+      username: '',
+      password: '',
       signingIn: false,
       passwordType: true,
       rememberMe: false,
       warningAlert: false,
       errorAlert: false,
-      indications: { warning: "", error: "" },
+      indications: { warning: '', error: '' },
       version,
     };
   },
   methods: {
     async signIn() {
       // validate and login
-      const valid = this.$refs["signInForm"].validate();
+      const valid = this.$refs['signInForm'].validate();
       if (valid) {
         this.signingIn = true;
         const response = await getToken(this.username, this.password);
         if (response.code === 0) {
           this.rememberMe
-            ? localStorage.setItem("va-access-token", response.result)
-            : sessionStorage.setItem("va-access-token", response.result);
-          await this.$router.push("/");
+            ? localStorage.setItem('va-access-token', response.result)
+            : sessionStorage.setItem('va-access-token', response.result);
+          await this.$router.push('/');
         } else {
           this.indications.error = response.message;
           this.errorAlert = true;
@@ -149,7 +149,7 @@ export default {
       }
     },
     whenPressingEnter(e) {
-      if (e.key === "Enter") {
+      if (e.key === 'Enter') {
         this.signIn();
       }
     },

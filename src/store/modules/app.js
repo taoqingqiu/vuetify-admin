@@ -1,5 +1,5 @@
 const state = {
-  notification: { show: false, content: "", loading: false, level: "" },
+  notification: { show: false, content: '', loading: false, level: '' },
   loading: { isLoading: false, progress: 0 },
   navDrawer: true,
   clipped: false,
@@ -22,11 +22,11 @@ const mutations = {
 
 const actions = {
   dismissNotification({ commit }) {
-    commit("SET_NOTIFICATION", {
+    commit('SET_NOTIFICATION', {
       show: false,
-      content: "",
+      content: '',
       loading: false,
-      level: "",
+      level: '',
     });
   },
 };

@@ -52,14 +52,14 @@
   </v-dialog>
 </template>
 <script>
-import { updateRole } from "@/api/role";
+import { updateRole } from '@/api/role';
 export default {
-  props: ["value", "item"],
+  props: ['value', 'item'],
   data() {
     return {
       indications: {
-        warning: "",
-        error: "",
+        warning: '',
+        error: '',
       },
       warningAlert: false,
       errorAlert: false,
@@ -90,18 +90,18 @@ export default {
       if (valid) {
         if (this.modified) {
           this.submitting = true;
-          delete this.formData["id"];
+          delete this.formData['id'];
           await updateRole(this.item.id, this.formData);
           this.submitting = false;
 
-          this.$notify.success("Update saved!");
+          this.$notify.success('Update saved!');
           setTimeout(() => {
-            this.$notify.loading("Reloading..");
-            this.$emit("reload");
+            this.$notify.loading('Reloading..');
+            this.$emit('reload');
           }, 800);
         }
       }
-      this.$emit("input", false);
+      this.$emit('input', false);
     },
   },
 };
