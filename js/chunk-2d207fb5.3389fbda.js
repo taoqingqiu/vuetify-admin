@@ -1,2 +1,0 @@
-(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d207fb5"],{a39f:function(n,t,e){"use strict";e.r(t);var a=function(){var n=this,t=n.$createElement,e=n._self._c||t;return e("v-container",{staticClass:"justify-center",attrs:{fluid:"","fill-height":""}},[n._v(" 三级菜单示例页 ")])},i=[],l=e("2877"),s=e("6544"),c=e.n(s),r=e("a523"),u={},f=Object(l["a"])(u,a,i,!1,null,null,null);t["default"]=f.exports;c()(f,{VContainer:r["a"]})}}]);
-//# sourceMappingURL=chunk-2d207fb5.3389fbda.js.map
