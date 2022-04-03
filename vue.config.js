@@ -1,4 +1,4 @@
-const ghPages = process.env.NODE_ENV === 'ghPages';
+const ghPages = process.env.VUE_APP_ENV === 'gh-pages';
 
 module.exports = {
   transpileDependencies: ['vuetify'],
